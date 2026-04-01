@@ -12,8 +12,7 @@ jupyter_client==8.8.0
 jupyter_core==5.9.1
 matplotlib-inline==0.2.1
 nest-asyncio==1.6.0
-## !! Could not determine repository location
--e /home/ysf/S2_2025-2026/Introduction_to_AI/Project/GlassBox
+-e git+https://github.com/SmollCoco/GlassBox.git@29ded830f11d5d959330016683bb056edee5e344#egg=numpandas
 numpy==2.4.4
 openpyxl==3.1.5
 packaging==26.0
