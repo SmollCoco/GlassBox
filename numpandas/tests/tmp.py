@@ -1,1 +1,0 @@
-import numpandas as npd
