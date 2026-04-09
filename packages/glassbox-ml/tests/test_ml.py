@@ -9,10 +9,13 @@ from __future__ import annotations
 import numpy as np
 
 from GlassBox.ml import (
+    DecisionTree,
+    GaussianNaiveBayes,
     KNNClassifier,
     KNNRegressor,
     LinearRegressionGD,
     LogisticRegressionGD,
+    RandomForest,
     accuracy_score,
     f1_score,
     mean_absolute_error,
@@ -103,11 +106,97 @@ def test_knn_classifier_and_regressor():
 def test_train_test_split():
     X = np.arange(20).reshape(10, 2)
     y = np.arange(10)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=7)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=7
+    )
     assert X_train.shape == (7, 2)
     assert X_test.shape == (3, 2)
     assert y_train.shape == (7,)
     assert y_test.shape == (3,)
+
+
+def test_decision_tree_classifier_and_regressor():
+    X_class = np.array(
+        [
+            [0.0, 0.0],
+            [0.0, 1.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+        ]
+    )
+    y_class = np.array(["no", "no", "yes", "yes"], dtype=object)
+    clf = DecisionTree(task="classification", max_depth=2)
+    clf.fit(X_class, y_class)
+    assert clf.predict([[0.0, 0.0], [1.0, 1.0]]).tolist() == ["no", "yes"]
+
+    X_reg = np.array([[1], [2], [3], [4], [5]], dtype=float)
+    y_reg = np.array([2, 4, 6, 8, 10], dtype=float)
+    reg = DecisionTree(task="regression", max_depth=3)
+    reg.fit(X_reg, y_reg)
+    preds = reg.predict([[1], [5]]).astype(float)
+    assert np.allclose(preds, [2.0, 10.0], atol=1e-6)
+
+
+def test_gaussian_naive_bayes_predict_and_proba():
+    X = np.array(
+        [
+            [0.0, 0.0],
+            [0.0, 1.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+            [2.0, 1.0],
+            [1.0, 2.0],
+        ]
+    )
+    y = np.array(["cold", "cold", "cold", "hot", "hot", "hot"], dtype=object)
+    model = GaussianNaiveBayes()
+    model.fit(X, y)
+
+    preds = model.predict([[0.0, 0.0], [2.0, 2.0]])
+    assert preds.tolist() == ["cold", "hot"]
+
+    proba = model.predict_proba([[0.0, 0.0], [2.0, 2.0]])
+    assert proba.shape == (2, 2)
+    assert np.allclose(np.sum(proba, axis=1), [1.0, 1.0], atol=1e-9)
+
+
+def test_random_forest_classifier_and_regressor():
+    X_class = np.array(
+        [
+            [0.0, 0.0],
+            [0.0, 1.0],
+            [1.0, 0.0],
+            [1.0, 1.0],
+            [2.0, 1.0],
+            [1.0, 2.0],
+        ]
+    )
+    y_class = np.array(["cold", "cold", "cold", "hot", "hot", "hot"], dtype=object)
+    clf = RandomForest(
+        task="classification",
+        n_estimators=15,
+        max_depth=4,
+        random_state=11,
+    )
+    clf.fit(X_class, y_class)
+    class_preds = clf.predict([[0.0, 0.0], [2.0, 2.0]])
+    assert class_preds.tolist() == ["cold", "hot"]
+
+    X_reg = np.array([[1], [2], [3], [4], [5], [6]], dtype=float)
+    y_reg = np.array([2, 4, 6, 8, 10, 12], dtype=float)
+    reg = RandomForest(
+        task="regression",
+        n_estimators=21,
+        max_depth=5,
+        random_state=19,
+    )
+    reg.fit(X_reg, y_reg)
+    reg_preds = reg.predict([[1.5], [5.5]]).astype(float)
+    assert reg_preds.shape == (2,)
+    assert np.all(np.isfinite(reg_preds))
+    assert reg_preds[1] > reg_preds[0]
+    assert np.all(reg_preds >= y_reg.min())
+    assert np.all(reg_preds <= y_reg.max())
 
 
 def main():
@@ -118,6 +207,15 @@ def main():
         ("logistic regression GD", test_logistic_regression_gd),
         ("KNN classifier/regressor", test_knn_classifier_and_regressor),
         ("train_test_split", test_train_test_split),
+        (
+            "decision tree classifier/regressor",
+            test_decision_tree_classifier_and_regressor,
+        ),
+        ("gaussian naive bayes", test_gaussian_naive_bayes_predict_and_proba),
+        (
+            "random forest classifier/regressor",
+            test_random_forest_classifier_and_regressor,
+        ),
     ]
     for name, fn in tests:
         run_test(name, fn)
