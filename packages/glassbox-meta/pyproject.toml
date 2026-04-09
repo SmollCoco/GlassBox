@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glassbox"
+version = "0.1.0"
+description = "Meta package for the GlassBox suite"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "GlassBox" }]
+dependencies = [
+  "glassbox-numpandas>=0.1.0",
+  "glassbox-eda>=0.1.0",
+  "glassbox-preprocessing>=0.1.0",
+  "glassbox-ml>=0.1.0",
+]

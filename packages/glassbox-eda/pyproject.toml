@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glassbox-eda"
+version = "0.1.0"
+description = "EDA and profiling package for GlassBox"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "GlassBox" }]
+dependencies = [
+  "numpy>=1.23",
+  "matplotlib>=3.7",
+  "seaborn>=0.13",
+  "glassbox-numpandas>=0.1.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["GlassBox.eda*"]
+namespaces = true
