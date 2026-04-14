@@ -116,7 +116,10 @@ class SMOTE:
                 # Interpolate numerical
                 gap = rng.random()
                 if num_indices:
-                    new_x[num_indices] = current_x[num_indices] + gap * (neighbor_x[num_indices] - current_x[num_indices])
+                    curr_num = current_x[num_indices].astype(float)
+                    neigh_num = neighbor_x[num_indices].astype(float)
+                    new_num = curr_num + gap * (neigh_num - curr_num)
+                    new_x[num_indices] = new_num.astype(current_x.dtype)
                     
                 # Categorical (mode/random)
                 if cat_indices:

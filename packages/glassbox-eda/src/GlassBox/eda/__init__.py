@@ -6,10 +6,10 @@ Classes:
 - DataProfiler: Generates statistical profiles and HTML reports.
 - PlotManager: Facade for plotting distribution, relationships, and missingness.
 - IQR_OutlierDetector: Detects outliers using Interquartile Range logic.
+- UnivariateStats: Univariate statistical calculations.
 
 Functions/Instances:
 - plot_manager: A global instance of PlotManager for convenient usage.
-- calc_mean, calc_median, calc_mode, calc_std, calc_skewness, calc_kurtosis: Manual statistical calculations.
 """
 
 from .plotter import (
@@ -18,17 +18,15 @@ from .plotter import (
     BoxPlotter,
     ScatterPlotter,
     MissingnessPlotter,
+    CountPlotter,
+    CorrelationMatrixPlotter,
+    PairPlotMatrixPlotter,
     PlotManager,
     plot_manager
 )
 from .profiler import DataProfiler
 from .stats import (
-    calc_mean,
-    calc_median,
-    calc_mode,
-    calc_std,
-    calc_skewness,
-    calc_kurtosis,
+    UnivariateStats,
     IQR_OutlierDetector
 )
 
@@ -41,11 +39,9 @@ __all__ = [
     "BoxPlotter",
     "ScatterPlotter",
     "MissingnessPlotter",
+    "CountPlotter",
+    "CorrelationMatrixPlotter",
+    "PairPlotMatrixPlotter",
     "IQR_OutlierDetector",
-    "calc_mean",
-    "calc_median",
-    "calc_mode",
-    "calc_std",
-    "calc_skewness",
-    "calc_kurtosis"
+    "UnivariateStats"
 ]
