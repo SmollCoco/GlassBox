@@ -13,6 +13,7 @@ Classes:
 - OrdinalEncoder: Encodes categorical features as ordinal integers.
 - LabelEncoder: Encodes target labels with values between 0 and n_classes-1.
 - ColumnTransformer: Applies transformers to specific columns in a dataset.
+- SMOTE: Synthetic Minority Over-sampling Technique for imbalanced datasets.
 
 Functions:
 - make_column_transformer: Factory function for creating ColumnTransformers.
@@ -25,6 +26,7 @@ from .exceptions import DimensionalityError, NotFittedError, PreprocessingError
 from .impute import SimpleImputer
 from .scale import MinMaxScaler, RobustScaler, StandardScaler
 from .transform import FunctionTransformer
+from .smote import SMOTE
 
 __all__ = [
     "Transformer",
@@ -41,4 +43,5 @@ __all__ = [
     "PreprocessingError",
     "NotFittedError",
     "DimensionalityError",
+    "SMOTE",
 ]

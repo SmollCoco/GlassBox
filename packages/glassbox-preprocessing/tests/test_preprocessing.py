@@ -8,7 +8,7 @@ from GlassBox.preprocessing.impute import SimpleImputer
 from GlassBox.preprocessing.scale import StandardScaler, MinMaxScaler, RobustScaler
 from GlassBox.preprocessing.encode import OneHotEncoder, OrdinalEncoder, LabelEncoder
 from GlassBox.preprocessing.compose import ColumnTransformer, make_column_transformer
-
+from GlassBox.preprocessing.smote import SMOTE
 
 class TestImputer(unittest.TestCase):
     def setUp(self):
@@ -81,6 +81,30 @@ class TestEncoders(unittest.TestCase):
         res = enc.fit_transform(self.target)
         self.assertEqual(len(res), 3)
         self.assertTrue(np.max(res) <= 1)
+        
+class TestSMOTE(unittest.TestCase):
+    def setUp(self):
+        # Create an imbalanced dataset with numerical and categorical features
+        self.X = DataFrame({
+            "num": [1.0, 2.0, 3.0, 4.0, 5.0, 1.5, 2.5],
+            "cat": ["a", "b", "a", "c", "b", "a", "a"]
+        })
+        self.y = Series([0, 0, 0, 0, 0, 1, 1], name="target")
+        
+    def test_smote_resample(self):
+        smote = SMOTE(k_neighbors=1, random_state=42)
+        X_res, y_res = smote.fit_resample(self.X, self.y)
+        
+        # Verify sizes (minority class 1 should be upsampled to 5)
+        self.assertEqual(len(y_res), 10)
+        self.assertEqual(np.sum(y_res.to_numpy() == 1), 5)
+        self.assertEqual(np.sum(y_res.to_numpy() == 0), 5)
+        
+        # Verify columns exist and are same
+        self.assertListEqual(X_res.columns, ["num", "cat"])
+        # Verify categorical interpolation preserved valid types
+        cat_vals = set(X_res["cat"].to_numpy())
+        self.assertTrue(cat_vals.issubset({"a", "b", "c"}))
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,7 @@ import numpy as np
 
 from GlassBox.numpandas.core.dataframe import DataFrame
 from GlassBox.numpandas.utils.dtypes import is_nan_value
-from .stats import calc_mean, calc_median, calc_mode, calc_std, calc_skewness, calc_kurtosis, IQR_OutlierDetector
+from .stats import UnivariateStats, IQR_OutlierDetector
 
 
 class DataProfiler:
@@ -78,17 +78,17 @@ class DataProfiler:
             
             if ftype == "Numerical":
                 numeric_arr = arr.astype(float, copy=False)
-                stats["mean"] = round(calc_mean(numeric_arr), 4)
-                stats["median"] = round(calc_median(numeric_arr), 4)
-                stats["std"] = round(calc_std(numeric_arr), 4)
+                stats["mean"] = round(UnivariateStats.calc_mean(numeric_arr), 4)
+                stats["median"] = round(UnivariateStats.calc_median(numeric_arr), 4)
+                stats["std"] = round(UnivariateStats.calc_std(numeric_arr), 4)
                 stats["min"] = round(float(np.nanmin(numeric_arr)) if missing < total else np.nan, 4)
                 stats["max"] = round(float(np.nanmax(numeric_arr)) if missing < total else np.nan, 4)
-                stats["skewness"] = round(calc_skewness(numeric_arr), 4)
-                stats["kurtosis"] = round(calc_kurtosis(numeric_arr), 4)
+                stats["skewness"] = round(UnivariateStats.calc_skewness(numeric_arr), 4)
+                stats["kurtosis"] = round(UnivariateStats.calc_kurtosis(numeric_arr), 4)
                 stats["outliers_iqr"] = outlier_counts.get(col, 0)
                 
             elif ftype in ("Categorical", "Boolean"):
-                stats["mode"] = str(calc_mode(arr))
+                stats["mode"] = str(UnivariateStats.calc_mode(arr))
                 # Count distincts
                 if np.issubdtype(arr.dtype, np.floating):
                     distinct = len(np.unique(arr[~np.isnan(arr)]))
