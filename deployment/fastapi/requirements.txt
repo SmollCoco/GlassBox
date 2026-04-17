@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-multipart
+numpy
+openpyxl
+matplotlib
+seaborn
+# Add GlassBox local installation if needed
