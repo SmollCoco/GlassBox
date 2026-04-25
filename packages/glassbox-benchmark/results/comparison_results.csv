@@ -1,0 +1,52 @@
+group,case,library,metric,value,unit,notes
+DataFrame,mean 1000x8,GlassBox,runtime_mean,0.00012333334113160768,seconds,
+DataFrame,mean 1000x8,pandas/sklearn,runtime_mean,0.00014666665811091661,seconds,
+DataFrame,mean 1000x8,GlassBox,runtime_std,4.664846178757987e-05,seconds,
+DataFrame,mean 1000x8,pandas/sklearn,runtime_std,8.279349036300167e-05,seconds,
+DataFrame,mean 1000x8,GlassBox,speedup_vs_baseline,1.1891890446267097,x,Above 1.0 means GlassBox was faster in this run.
+DataFrame,mean 1000x8,GlassBox,max_abs_diff,0.0,absolute,
+DataFrame,sum 1000x8,GlassBox,runtime_mean,5.446665454655886e-05,seconds,
+DataFrame,sum 1000x8,pandas/sklearn,runtime_mean,9.373330976814032e-05,seconds,
+DataFrame,sum 1000x8,GlassBox,runtime_std,1.3136303173982974e-05,seconds,
+DataFrame,sum 1000x8,pandas/sklearn,runtime_std,3.7129702833922256e-05,seconds,
+DataFrame,sum 1000x8,GlassBox,speedup_vs_baseline,1.720930182851891,x,Above 1.0 means GlassBox was faster in this run.
+DataFrame,sum 1000x8,GlassBox,max_abs_diff,0.0,absolute,
+Preprocessing,MinMaxScaler 1000x8,GlassBox,runtime_mean,0.000504633334154884,seconds,
+Preprocessing,MinMaxScaler 1000x8,pandas/sklearn,runtime_mean,0.0002824333496391773,seconds,
+Preprocessing,MinMaxScaler 1000x8,GlassBox,runtime_std,7.17260427425739e-05,seconds,
+Preprocessing,MinMaxScaler 1000x8,pandas/sklearn,runtime_std,0.00014914359236145412,seconds,
+Preprocessing,MinMaxScaler 1000x8,GlassBox,speedup_vs_baseline,0.5596803273255266,x,Above 1.0 means GlassBox was faster in this run.
+Preprocessing,MinMaxScaler 1000x8,GlassBox,max_abs_diff,2.220446049250313e-16,absolute,
+Metrics,accuracy_score n=1000,GlassBox,runtime_mean,2.096667109678189e-05,seconds,
+Metrics,accuracy_score n=1000,pandas/sklearn,runtime_mean,0.0002385333258037766,seconds,
+Metrics,accuracy_score n=1000,GlassBox,runtime_std,1.2744179644928394e-05,seconds,
+Metrics,accuracy_score n=1000,pandas/sklearn,runtime_std,9.369684914560742e-05,seconds,
+Metrics,accuracy_score n=1000,GlassBox,speedup_vs_baseline,11.3767857903007,x,Above 1.0 means GlassBox was faster in this run.
+Metrics,accuracy_score n=1000,GlassBox,abs_diff,0.0,absolute,
+Metrics,mean_squared_error n=1000,GlassBox,runtime_mean,1.5366667260726292e-05,seconds,
+Metrics,mean_squared_error n=1000,pandas/sklearn,runtime_mean,0.00013913330622017384,seconds,
+Metrics,mean_squared_error n=1000,GlassBox,runtime_std,6.727854238214504e-06,seconds,
+Metrics,mean_squared_error n=1000,pandas/sklearn,runtime_std,2.6004124160851858e-05,seconds,
+Metrics,mean_squared_error n=1000,GlassBox,speedup_vs_baseline,9.054227820483035,x,Above 1.0 means GlassBox was faster in this run.
+Metrics,mean_squared_error n=1000,GlassBox,abs_diff,0.0,absolute,
+Models,linear regression fit 1000x8,GlassBox,runtime_mean,0.005162766668945551,seconds,
+Models,linear regression fit 1000x8,pandas/sklearn,runtime_mean,0.0007750000028560559,seconds,
+Models,linear regression fit 1000x8,GlassBox,runtime_std,0.00030346328053344946,seconds,
+Models,linear regression fit 1000x8,pandas/sklearn,runtime_std,0.0003737242273958432,seconds,
+Models,linear regression fit 1000x8,GlassBox,speedup_vs_baseline,0.1501133118251774,x,Above 1.0 means GlassBox was faster in this run.
+Models,linear regression fit 1000x8,GlassBox,r2,0.9986264454909528,score,
+Models,linear regression fit 1000x8,pandas/sklearn,r2,0.9986264455031323,score,
+Models,logistic regression fit 1000x8,GlassBox,runtime_mean,0.08096923333747934,seconds,
+Models,logistic regression fit 1000x8,pandas/sklearn,runtime_mean,0.0053773666732013226,seconds,
+Models,logistic regression fit 1000x8,GlassBox,runtime_std,0.0016292271306702114,seconds,
+Models,logistic regression fit 1000x8,pandas/sklearn,runtime_std,0.0032037620674056386,seconds,
+Models,logistic regression fit 1000x8,GlassBox,speedup_vs_baseline,0.06641246868163475,x,Above 1.0 means GlassBox was faster in this run.
+Models,logistic regression fit 1000x8,GlassBox,accuracy,0.996,score,
+Models,logistic regression fit 1000x8,pandas/sklearn,accuracy,1.0,score,
+Models,KNN predict 1000x8,GlassBox,runtime_mean,0.01274283331197997,seconds,
+Models,KNN predict 1000x8,pandas/sklearn,runtime_mean,0.0023238333330179253,seconds,
+Models,KNN predict 1000x8,GlassBox,runtime_std,0.00043646472379268964,seconds,
+Models,KNN predict 1000x8,pandas/sklearn,runtime_std,0.00031285841022641567,seconds,
+Models,KNN predict 1000x8,GlassBox,speedup_vs_baseline,0.18236394341227163,x,Above 1.0 means GlassBox was faster in this run.
+Models,KNN predict 1000x8,GlassBox,accuracy,0.888,score,
+Models,KNN predict 1000x8,pandas/sklearn,accuracy,0.888,score,
