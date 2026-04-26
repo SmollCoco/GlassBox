@@ -1,3 +1,19 @@
+[build-system]
+requires = ["setuptools>=80.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-glassbox"
+version = "1.0.0"
+authors = [
+  { name="Youssef BENTALEB", email="bentalebyoussef7799@gmail.com" },
+  { name="Manal Zaidi", email="manazaidi2005@gmail.com" },
+  { name="Yassine Bourich", email="yassine.bourich@um6p.ma" },
+  { name="Farah Bouhzam", email="farah.bouhzam@um6p.ma" },
+]
+description = ""
+requires-python = ">=3.11"
+
 [tool.pytest.ini_options]
 testpaths = [
   "packages/glassbox-numpandas/tests",

@@ -207,7 +207,7 @@ class PairPlotMatrixPlotter(BasePlotter):
             
         # Convert dictionary to a recognizable format for seaborn. Seaborn can plot dict arrays.
         import pandas as pd
-        pd_df = pd.DataFrame(data_dict) 
+        pd_df = pd.DataFrame(data_dict)
         # Note: falling back to pandas only for data transformation for seaborn compatibility 
         # since seaborn's pairplot fundamentally requires pandas dataframe internally in versions < 0.13 usually
         
