@@ -7,7 +7,7 @@ classDiagram
         +shuffle
         +random_state
         +__init__(n_splits: int, shuffle: bool, random_state: int)
-        +split(X: DataFrame / np.ndarray)  tuple<np.ndarray, np.ndarray>
+        +split(X: DataFrame / np.ndarray)  tuple[np.ndarray, np.ndarray]
     }
     class GridSearchCV {
         +estimator
@@ -18,7 +18,7 @@ classDiagram
         +best_score_
         +best_estimator_
         +cv_results_
-        +__init__(estimator: Any, param_grid: dict<str, list>, cv: int / KFold, scoring: str)
+        +__init__(estimator: Any, param_grid: dict[str, list], cv: int / KFold, scoring: str)
         +fit(X: DataFrame, y: Series)  "GridSearchCV"
         +predict(X: DataFrame)
     }
@@ -33,7 +33,7 @@ classDiagram
         +best_score_
         +best_estimator_
         +cv_results_
-        +__init__(estimator: Any, param_distributions: dict<str, list>, n_iter: int, cv: int / KFold, scoring: str, random_state: int)
+        +__init__(estimator: Any, param_distributions: dict[str, list], n_iter: int, cv: int / KFold, scoring: str, random_state: int)
         +fit(X: DataFrame, y: Series)  "RandomizedSearchCV"
         +predict(X: DataFrame)
     }

@@ -11,9 +11,9 @@ classDiagram
         +transformers
         +remainder
         +transformers_: list[tuple[str, Transformer, list[str]]]
-        +_is_fitted
+        -_is_fitted
         +feature_names_in_: list[str]
-        +__init__(transformers: list<tuple<str, Transformer, list<str>>>, remainder: str)
+        +__init__(transformers: list[tuple[str, Transformer, list[str]]], remainder: str)
         +fit(X: DataFrame, y: Series / None)  "ColumnTransformer"
         +transform(X: DataFrame)  DataFrame
     }
@@ -21,7 +21,7 @@ classDiagram
         +handle_unknown
         +categories_: dict[str, list[any]]
         +feature_names_in_: list[str]
-        +_is_fitted
+        -_is_fitted
         +__init__(handle_unknown: str)
         +fit(X: DataFrame, y: Series / None)  "OneHotEncoder"
         +transform(X: DataFrame)  DataFrame
@@ -31,7 +31,7 @@ classDiagram
         +unknown_value
         +categories_: dict[str, list[any]]
         +feature_names_in_: list[str]
-        +_is_fitted
+        -_is_fitted
         +__init__(handle_unknown: str, unknown_value: int)
         +fit(X: DataFrame, y: Series / None)  "OrdinalEncoder"
         +transform(X: DataFrame)  DataFrame
@@ -56,7 +56,7 @@ classDiagram
         +imputation_indicator
         +statistics_: dict[str, any]
         +feature_names_in_: list[str]
-        +_is_fitted
+        -_is_fitted
         +__init__(strategy: str, fill_value: any, imputation_indicator: bool)
         +fit(X: DataFrame, y: Series / None)  "SimpleImputer"
         +transform(X: DataFrame)  DataFrame
@@ -65,7 +65,7 @@ classDiagram
         +mean_: dict[str, float]
         +var_: dict[str, float]
         +scale_: dict[str, float]
-        +_is_fitted
+        -_is_fitted
         +feature_names_in_: list[str]
         +__init__()
         +fit(X: DataFrame, y: Series / None)  "StandardScaler"
@@ -75,7 +75,7 @@ classDiagram
         +data_min_: dict[str, float]
         +data_max_: dict[str, float]
         +data_range_: dict[str, float]
-        +_is_fitted
+        -_is_fitted
         +feature_names_in_: list[str]
         +__init__()
         +fit(X: DataFrame, y: Series / None)  "MinMaxScaler"
@@ -84,7 +84,7 @@ classDiagram
     class RobustScaler {
         +center_: dict[str, float]
         +scale_: dict[str, float]
-        +_is_fitted
+        -_is_fitted
         +feature_names_in_: list[str]
         +__init__()
         +fit(X: DataFrame, y: Series / None)  "RobustScaler"

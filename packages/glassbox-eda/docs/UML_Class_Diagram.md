@@ -4,7 +4,7 @@
 classDiagram
     class BasePlotter {
         +plot(df: DataFrame, *args, **kwargs)  None
-        +_prepare_axes(ax, figsize)
+        -_prepare_axes(ax, figsize)
     }
     class HistPlotter {
         +plot(df: DataFrame, column: str, bins: int, title: str, ax, **kwargs)  None
@@ -28,13 +28,13 @@ classDiagram
         +plot(df: DataFrame, title: str, **kwargs)  None
     }
     class PlotManager {
-        +_hist_plotter
-        +_box_plotter
-        +_scatter_plotter
-        +_missingness_plotter
-        +_count_plotter
-        +_correlation_plotter
-        +_pairplot_plotter
+        -_hist_plotter
+        -_box_plotter
+        -_scatter_plotter
+        -_missingness_plotter
+        -_count_plotter
+        -_correlation_plotter
+        -_pairplot_plotter
         +__init__()
         +histplot(df: DataFrame, column: str, bins: int, title: str, **kwargs)  None
         +boxplot(df: DataFrame, column: str, title: str, **kwargs)  None
@@ -43,7 +43,7 @@ classDiagram
         +countplot(df: DataFrame, column: str, title: str, **kwargs)  None
         +correlation_matrix(df: DataFrame, title: str, **kwargs)  None
         +pairplot(df: DataFrame, title: str, **kwargs)  None
-        +multiplot(df: DataFrame, columns: list<str>, plot_type: str, cols: int, **kwargs)  None
+        +multiplot(df: DataFrame, columns: list[str], plot_type: str, cols: int, **kwargs)  None
     }
     class DataProfiler {
         +df
@@ -68,7 +68,7 @@ classDiagram
         +upper_bounds_: dict[str, float]
         +__init__(multiplier: float)
         +fit(X: DataFrame)  "IQR_OutlierDetector"
-        +get_outlier_report(X: DataFrame)  dict<str, int>
+        +get_outlier_report(X: DataFrame)  dict[str, int]
         +cap_outliers(X: DataFrame)  DataFrame
     }
     ABC <|-- BasePlotter
