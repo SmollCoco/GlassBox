@@ -14,3 +14,14 @@ If you prefer developing internally, simply navigate inside your root monorepo t
 ```bash
 pip install -e packages/glassbox-meta
 ```
+
+## Included Packages
+- glassbox-autofit
+- glassbox-benchmark
+- glassbox-numpandas
+- glassbox-eda
+- glassbox-preprocessing
+- glassbox-ml
+- glassbox-optimization
+- glassbox-pipeline
+- glassbox-split
