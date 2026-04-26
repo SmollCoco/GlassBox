@@ -1,12 +1,24 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "glassbox-optimization"
 version = "0.1.0"
-description = "glassbox-optimization package for the GlassBox ecosystem"
-dependencies = ['glassbox-numpandas', 'glassbox-split', 'glassbox-pipeline']
+description = "Optimization and search utilities for GlassBox"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "GlassBox" }]
+dependencies = [
+  "numpy>=1.23",
+  "glassbox-numpandas>=0.1.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["GlassBox.optimization*"]
+namespaces = true

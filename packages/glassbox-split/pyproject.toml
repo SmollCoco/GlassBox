@@ -1,12 +1,24 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "glassbox-split"
 version = "0.1.0"
-description = "glassbox-split package for the GlassBox ecosystem"
-dependencies = ['glassbox-numpandas', 'numpy']
+description = "Dataset splitting utilities for GlassBox"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "GlassBox" }]
+dependencies = [
+  "numpy>=1.23",
+  "glassbox-numpandas>=0.1.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["GlassBox.split*"]
+namespaces = true
