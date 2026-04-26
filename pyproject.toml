@@ -3,11 +3,19 @@ testpaths = [
   "packages/glassbox-numpandas/tests",
   "packages/glassbox-eda/tests",
   "packages/glassbox-preprocessing/tests",
+  "packages/glassbox-split/tests",
+  "packages/glassbox-pipeline/tests",
+  "packages/glassbox-optimization/tests",
   "packages/glassbox-ml/tests",
+  "packages/glassbox-benchmark/tests",
 ]
 pythonpath = [
   "packages/glassbox-numpandas/src",
   "packages/glassbox-eda/src",
   "packages/glassbox-preprocessing/src",
+  "packages/glassbox-split/src",
+  "packages/glassbox-pipeline/src",
+  "packages/glassbox-optimization/src",
   "packages/glassbox-ml/src",
+  "packages/glassbox-benchmark/src",
 ]

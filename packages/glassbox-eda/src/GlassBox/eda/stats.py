@@ -3,94 +3,99 @@ from typing import Any
 
 from GlassBox.numpandas.core.series import Series
 from GlassBox.numpandas.core.dataframe import DataFrame
+from GlassBox.numpandas.utils.dtypes import is_nan_value
 
 
-def calc_mean(arr: np.ndarray) -> float:
-    """Manually calculate the mean of an array."""
-    valid_arr = arr[~np.isnan(arr)]
-    if len(valid_arr) == 0:
-        return np.nan
-    return float(np.sum(valid_arr) / len(valid_arr))
+class UnivariateStats:
+    """A collection of univariate statistical methods."""
 
-def calc_median(arr: np.ndarray) -> float:
-    """Manually calculate the median of an array."""
-    valid_arr = np.sort(arr[~np.isnan(arr)])
-    n = len(valid_arr)
-    if n == 0:
-        return np.nan
-    mid = n // 2
-    if n % 2 == 0:
-        return float((valid_arr[mid - 1] + valid_arr[mid]) / 2.0)
-    else:
-        return float(valid_arr[mid])
+    @staticmethod
+    def calc_mean(arr: np.ndarray) -> float:
+        """Manually calculate the mean of an array."""
+        valid_arr = arr[~np.isnan(arr)]
+        if len(valid_arr) == 0:
+            return np.nan
+        return float(np.sum(valid_arr) / len(valid_arr))
 
-def calc_mode(arr: np.ndarray) -> Any:
-    """Manually calculate the mode of an array."""
-    # Remove nans depending on data type
-    if np.issubdtype(arr.dtype, np.floating):
-        arr = arr[~np.isnan(arr)]
-    else:
-        from GlassBox.numpandas.utils.dtypes import is_nan_value
-        arr = np.array([x for x in arr if not is_nan_value(x)])
+    @staticmethod
+    def calc_median(arr: np.ndarray) -> float:
+        """Manually calculate the median of an array."""
+        valid_arr = np.sort(arr[~np.isnan(arr)])
+        n = len(valid_arr)
+        if n == 0:
+            return np.nan
+        mid = n // 2
+        if n % 2 == 0:
+            return float((valid_arr[mid - 1] + valid_arr[mid]) / 2.0)
+        else:
+            return float(valid_arr[mid])
+
+    @staticmethod
+    def calc_mode(arr: np.ndarray) -> Any:
+        """Manually calculate the mode of an array."""
+        if np.issubdtype(arr.dtype, np.floating):
+            valid_arr = arr[~np.isnan(arr)]
+        else:
+            valid_arr = np.array([x for x in arr if not is_nan_value(x)])
+            
+        if len(valid_arr) == 0:
+            return np.nan if np.issubdtype(arr.dtype, np.number) else ""
+            
+        unique_vals, counts = np.unique(valid_arr, return_counts=True)
+        max_count_idx = np.argmax(counts)
+        return unique_vals[max_count_idx]
+
+    @staticmethod
+    def calc_std(arr: np.ndarray) -> float:
+        """Manually calculate the sample standard deviation."""
+        valid_arr = arr[~np.isnan(arr)]
+        n = len(valid_arr)
+        if n <= 1:
+            return 0.0
+        mean_val = float(np.sum(valid_arr) / n)
+        variance = np.sum((valid_arr - mean_val) ** 2) / (n - 1)
+        return float(np.sqrt(variance))
+
+    @classmethod
+    def calc_skewness(cls, arr: np.ndarray) -> float:
+        """Manually calculate the skewness."""
+        valid_arr = arr[~np.isnan(arr)]
+        n = len(valid_arr)
+        if n <= 2:
+            return np.nan
+            
+        mean_val = cls.calc_mean(valid_arr)
+        std_val = cls.calc_std(valid_arr)
         
-    if len(arr) == 0:
-        return np.nan if np.issubdtype(arr.dtype, np.number) else ""
+        if std_val == 0:
+            return 0.0
+            
+        m3 = np.sum((valid_arr - mean_val) ** 3) / n
+        skew = m3 / (std_val ** 3)
         
-    unique_vals, counts = np.unique(arr, return_counts=True)
-    max_count_idx = np.argmax(counts)
-    return unique_vals[max_count_idx]
+        skew = skew * np.sqrt(n * (n - 1)) / (n - 2)
+        return float(skew)
 
-def calc_std(arr: np.ndarray) -> float:
-    """Manually calculate the sample standard deviation."""
-    valid_arr = arr[~np.isnan(arr)]
-    n = len(valid_arr)
-    if n <= 1:
-        return 0.0
-    mean_val = float(np.sum(valid_arr) / n)
-    variance = np.sum((valid_arr - mean_val) ** 2) / (n - 1)
-    return float(np.sqrt(variance))
-
-def calc_skewness(arr: np.ndarray) -> float:
-    """Manually calculate the skewness."""
-    valid_arr = arr[~np.isnan(arr)]
-    n = len(valid_arr)
-    if n <= 2:
-        return np.nan
+    @classmethod
+    def calc_kurtosis(cls, arr: np.ndarray) -> float:
+        """Manually calculate the sample kurtosis."""
+        valid_arr = arr[~np.isnan(arr)]
+        n = len(valid_arr)
+        if n <= 3:
+            return np.nan
+            
+        mean_val = cls.calc_mean(valid_arr)
+        std_val = cls.calc_std(valid_arr)
         
-    mean_val = calc_mean(valid_arr)
-    std_val = calc_std(valid_arr)
-    
-    if std_val == 0:
-        return 0.0
+        if std_val == 0:
+            return 0.0
+            
+        m4 = np.sum((valid_arr - mean_val) ** 4) / n
+        v = std_val ** 2
         
-    m3 = np.sum((valid_arr - mean_val) ** 3) / n
-    skew = m3 / (std_val ** 3)
-    
-    # Adjust for sample skewness
-    skew = skew * np.sqrt(n * (n - 1)) / (n - 2)
-    return float(skew)
-
-def calc_kurtosis(arr: np.ndarray) -> float:
-    """Manually calculate the sample kurtosis."""
-    valid_arr = arr[~np.isnan(arr)]
-    n = len(valid_arr)
-    if n <= 3:
-        return np.nan
-        
-    mean_val = calc_mean(valid_arr)
-    std_val = calc_std(valid_arr)
-    
-    if std_val == 0:
-        return 0.0
-        
-    m4 = np.sum((valid_arr - mean_val) ** 4) / n
-    v = std_val ** 2
-    
-    # Excess kurtosis
-    excess_kurt = (m4 / (v ** 2)) - 3.0
-    # Adjust for sample kurtosis
-    sample_kurt = (excess_kurt * (n - 1) * ((n + 1) / ((n - 2) * (n - 3)))) + (6 * ((n - 1) ** 2) / ((n - 2) * (n - 3)))
-    return float(sample_kurt)
+        excess_kurt = (m4 / (v ** 2)) - 3.0
+        sample_kurt = (excess_kurt * (n - 1) * ((n + 1) / ((n - 2) * (n - 3)))) + (6 * ((n - 1) ** 2) / ((n - 2) * (n - 3)))
+        return float(sample_kurt)
 
 
 class IQR_OutlierDetector:
@@ -143,11 +148,9 @@ class IQR_OutlierDetector:
                 arr = X[col].to_numpy().astype(float, copy=False).copy()
                 valid_mask = ~np.isnan(arr)
                 
-                # Cap below lower bound
                 lower = self.lower_bounds_[col]
                 arr[valid_mask & (arr < lower)] = lower
                 
-                # Cap above upper bound
                 upper = self.upper_bounds_[col]
                 arr[valid_mask & (arr > upper)] = upper
                 
