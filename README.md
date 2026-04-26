@@ -555,6 +555,17 @@ python -m build packages/glassbox-autofit
 python -m build packages/glassbox-meta
 ```
 
+## Achievements
+
+- **Zero-dependency core**: The end-to-end GlassBox training stack is implemented in-house on top of NumPy-first components (numpandas, preprocessing, ML, optimization, pipeline, autofit), without relying on pandas/scikit-learn in the core runtime path.
+- **Full AutoML pipeline**: A single `autofit()` call takes raw CSV input through task detection, EDA, preprocessing, model search/tuning, final pipeline fitting, and emits both a trained artifact and a structured JSON report.
+- **Custom pandas clone**: `numpandas` implements `DataFrame`/`Series`/`Index` from scratch with Copy-on-Write semantics (`no inplace` API, operations return new objects).
+- **Benchmark results**: On the checked-in benchmark report (`5000x8`, 5 repeats), GlassBox reached `30.51x` speedup for `accuracy_score`, `7.85x` for `mean_squared_error`, and up to `5.14x` for dataframe reductions; on model quality it matched scikit-learn in key cases (`KNN accuracy 0.88 vs 0.88`, `logistic accuracy 0.9944 vs 0.9944` = `100%` of baseline), while the results CSV run also shows near-parity (`0.996 vs 1.0` = `99.6%` on logistic at `1000x8`).
+- **Agent integration**: GlassBox is packaged as a NemoClaw/OpenClaw-compatible tool (`glassbox_autofit`) that invokes the AutoML CLI in Docker and returns model/report output back to the agent.
+- **Dockerized runtime**: The full AutoML engine is containerized and runnable with one `docker run` command against mounted `/data` and `/results` volumes.
+- **Monorepo architecture**: The project ships **10 independently installable packages** under one shared `GlassBox.*` namespace (`numpandas`, `eda`, `preprocessing`, `ml`, `split`, `pipeline`, `optimization`, `benchmark`, `autofit`, `meta`).
+- **UML documentation**: Detailed UML class diagrams are maintained across the package modules in `docs/UML_Class_Diagram.md` files.
+
 ## Documentation Map
 
 Additional package-specific documentation is available in:
