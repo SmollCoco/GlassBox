@@ -1,16 +1,18 @@
-# Ignore local output and data directories
+# Ignore dynamic local directories
 benchmark_outputs/
 test_data/
+results/
 
-# Ignore virtual environments and git
+# Ignore Python & environment artifacts
 .venv/
-.git/
-.github/
-.vscode/
-
-# Ignore Python cache files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.egg-info/
+packages.egg-info/
+
+# Ignore Git and IDE metadata
+.git/
+.github/
+.vscode/
