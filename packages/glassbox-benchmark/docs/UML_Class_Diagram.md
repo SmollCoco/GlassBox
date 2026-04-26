@@ -3,12 +3,12 @@
 ```mermaid
 classDiagram
     class BenchmarkResult {
-        +case
-        +unit
-        +notes
-        +group
-        +library
-        +metric
-        +value
+        +group: str
+        +case: str
+        +library: str
+        +metric: str
+        +value: float
+        +unit: str
+        +notes: str
     }
 ```

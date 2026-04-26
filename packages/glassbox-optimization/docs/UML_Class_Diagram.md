@@ -3,38 +3,38 @@
 ```mermaid
 classDiagram
     class KFold {
+        +n_splits
         +shuffle
         +random_state
-        +n_splits
-        +__init__(n_splits, shuffle, random_state)
-        +split(X)
+        +__init__(n_splits: int, shuffle: bool, random_state: int)
+        +split(X: DataFrame / np.ndarray)  tuple<np.ndarray, np.ndarray>
     }
     class GridSearchCV {
-        +scoring
-        +best_estimator_
-        +cv
-        +best_params_
-        +param_grid
-        +cv_results_
-        +best_score_
         +estimator
-        +__init__(estimator, param_grid, cv, scoring)
-        +fit(X, y)
-        +predict(X)
+        +param_grid
+        +cv
+        +scoring
+        +best_params_
+        +best_score_
+        +best_estimator_
+        +cv_results_
+        +__init__(estimator: Any, param_grid: dict<str, list>, cv: int / KFold, scoring: str)
+        +fit(X: DataFrame, y: Series)  "GridSearchCV"
+        +predict(X: DataFrame)
     }
     class RandomizedSearchCV {
-        +scoring
-        +random_state
-        +best_estimator_
-        +cv
-        +best_params_
-        +cv_results_
-        +n_iter
-        +best_score_
         +estimator
         +param_distributions
-        +__init__(estimator, param_distributions, n_iter, cv, scoring, random_state)
-        +fit(X, y)
-        +predict(X)
+        +n_iter
+        +cv
+        +scoring
+        +random_state
+        +best_params_
+        +best_score_
+        +best_estimator_
+        +cv_results_
+        +__init__(estimator: Any, param_distributions: dict<str, list>, n_iter: int, cv: int / KFold, scoring: str, random_state: int)
+        +fit(X: DataFrame, y: Series)  "RandomizedSearchCV"
+        +predict(X: DataFrame)
     }
 ```

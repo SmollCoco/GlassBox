@@ -3,45 +3,45 @@
 ```mermaid
 classDiagram
     class Transformer {
-        +fit(X, y)
-        +transform(X)
-        +fit_transform(X, y)
+        +fit(X: DataFrame, y: Series / None)  "Transformer"
+        +transform(X: DataFrame)  DataFrame
+        +fit_transform(X: DataFrame, y: Series / None)  DataFrame
     }
     class ColumnTransformer {
-        +feature_names_in_
-        +_is_fitted
-        +remainder
-        +transformers_
         +transformers
-        +__init__(transformers, remainder)
-        +fit(X, y)
-        +transform(X)
+        +remainder
+        +transformers_: list[tuple[str, Transformer, list[str]]]
+        +_is_fitted
+        +feature_names_in_: list[str]
+        +__init__(transformers: list<tuple<str, Transformer, list<str>>>, remainder: str)
+        +fit(X: DataFrame, y: Series / None)  "ColumnTransformer"
+        +transform(X: DataFrame)  DataFrame
     }
     class OneHotEncoder {
-        +_is_fitted
-        +categories_
         +handle_unknown
-        +feature_names_in_
-        +__init__(handle_unknown)
-        +fit(X, y)
-        +transform(X)
+        +categories_: dict[str, list[any]]
+        +feature_names_in_: list[str]
+        +_is_fitted
+        +__init__(handle_unknown: str)
+        +fit(X: DataFrame, y: Series / None)  "OneHotEncoder"
+        +transform(X: DataFrame)  DataFrame
     }
     class OrdinalEncoder {
-        +categories_
         +handle_unknown
-        +feature_names_in_
-        +_is_fitted
         +unknown_value
-        +__init__(handle_unknown, unknown_value)
-        +fit(X, y)
-        +transform(X)
+        +categories_: dict[str, list[any]]
+        +feature_names_in_: list[str]
+        +_is_fitted
+        +__init__(handle_unknown: str, unknown_value: int)
+        +fit(X: DataFrame, y: Series / None)  "OrdinalEncoder"
+        +transform(X: DataFrame)  DataFrame
     }
     class LabelEncoder {
-        +classes_
+        +classes_: np.ndarray / None
         +__init__()
-        +fit(y)
-        +transform(y)
-        +fit_transform(y)
+        +fit(y: Series / np.ndarray)  "LabelEncoder"
+        +transform(y: Series / np.ndarray)  np.ndarray
+        +fit_transform(y: Series / np.ndarray)  np.ndarray
     }
     class PreprocessingError {
     }
@@ -52,56 +52,56 @@ classDiagram
     }
     class SimpleImputer {
         +strategy
-        +feature_names_in_
-        +_is_fitted
-        +statistics_
-        +imputation_indicator
         +fill_value
-        +__init__(strategy, fill_value, imputation_indicator)
-        +fit(X, y)
-        +transform(X)
+        +imputation_indicator
+        +statistics_: dict[str, any]
+        +feature_names_in_: list[str]
+        +_is_fitted
+        +__init__(strategy: str, fill_value: any, imputation_indicator: bool)
+        +fit(X: DataFrame, y: Series / None)  "SimpleImputer"
+        +transform(X: DataFrame)  DataFrame
     }
     class StandardScaler {
-        +mean_
-        +var_
-        +feature_names_in_
+        +mean_: dict[str, float]
+        +var_: dict[str, float]
+        +scale_: dict[str, float]
         +_is_fitted
-        +scale_
+        +feature_names_in_: list[str]
         +__init__()
-        +fit(X, y)
-        +transform(X)
+        +fit(X: DataFrame, y: Series / None)  "StandardScaler"
+        +transform(X: DataFrame)  DataFrame
     }
     class MinMaxScaler {
-        +data_range_
-        +data_min_
-        +feature_names_in_
+        +data_min_: dict[str, float]
+        +data_max_: dict[str, float]
+        +data_range_: dict[str, float]
         +_is_fitted
-        +data_max_
+        +feature_names_in_: list[str]
         +__init__()
-        +fit(X, y)
-        +transform(X)
+        +fit(X: DataFrame, y: Series / None)  "MinMaxScaler"
+        +transform(X: DataFrame)  DataFrame
     }
     class RobustScaler {
-        +center_
+        +center_: dict[str, float]
+        +scale_: dict[str, float]
         +_is_fitted
-        +feature_names_in_
-        +scale_
+        +feature_names_in_: list[str]
         +__init__()
-        +fit(X, y)
-        +transform(X)
+        +fit(X: DataFrame, y: Series / None)  "RobustScaler"
+        +transform(X: DataFrame)  DataFrame
     }
     class SMOTE {
-        +random_state
         +k_neighbors
-        +__init__(k_neighbors, random_state)
-        +fit_resample(X, y)
+        +random_state
+        +__init__(k_neighbors: int, random_state: int)
+        +fit_resample(X: DataFrame, y: Series)  tuple<DataFrame, Series>
     }
     class FunctionTransformer {
         +func
         +kw_args
-        +__init__(func, **kw_args)
-        +fit(X, y)
-        +transform(X)
+        +__init__(func: Callable<<DataFrame, Any>, DataFrame> / None, **kw_args)
+        +fit(X: DataFrame, y: Series / None)  "FunctionTransformer"
+        +transform(X: DataFrame)  DataFrame
     }
     ABC <|-- Transformer
     Transformer <|-- ColumnTransformer

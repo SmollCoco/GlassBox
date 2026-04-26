@@ -4,11 +4,11 @@
 classDiagram
     class Pipeline {
         +steps
-        +__init__(steps)
-        +fit(X, y)
-        +_transform(X)
-        +transform(X)
-        +fit_transform(X, y)
-        +predict(X)
+        +__init__(steps: list<tuple<str, Any>>)
+        +fit(X: DataFrame, y: Series)  "Pipeline"
+        +_transform(X: DataFrame)  DataFrame
+        +transform(X: DataFrame)  DataFrame
+        +fit_transform(X: DataFrame, y: Series)  DataFrame
+        +predict(X: DataFrame)  Series / list / Any
     }
 ```

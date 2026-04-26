@@ -4,108 +4,108 @@
 classDiagram
     class _Node {
         +__slots__
-        +threshold
-        +value
-        +right
-        +left
         +feature
-        +__init__()
-        +is_leaf()
+        +threshold
+        +left
+        +right
+        +value
+        +__init__()  None
+        +is_leaf()  bool
     }
     class DecisionTree {
-        +_root
-        +min_samples_split
         +task
         +max_depth
-        +n_features_
-        +__init__(task, max_depth, min_samples_split)
-        +fit(X, y)
-        +predict(X)
-        +_gini(y)
-        +_mse(y)
-        +_impurity(y)
-        +_best_split(X, y)
-        +_leaf_value(y)
-        +_build(X, y, depth)
-        +_traverse(x, node)
-        +_check_fitted()
+        +min_samples_split
+        +_root: _Node / None
+        +n_features_: int / None
+        +__init__(task: str, max_depth: int / None, min_samples_split: int)  None
+        +fit(X: Any, y: Any)  "DecisionTree"
+        +predict(X: Any)  np.ndarray
+        +_gini(y: np.ndarray)  float
+        +_mse(y: np.ndarray)  float
+        +_impurity(y: np.ndarray)  float
+        +_best_split(X: np.ndarray, y: np.ndarray)  tuple<int / None, float / None, float>
+        +_leaf_value(y: np.ndarray)  Any
+        +_build(X: np.ndarray, y: np.ndarray, depth: int)  _Node
+        +_traverse(x: np.ndarray, node: _Node)  Any
+        +_check_fitted()  None
     }
     class LinearRegressionGD {
         +learning_rate
-        +tolerance
-        +loss_history_
-        +fit_intercept
-        +coef_
         +n_iterations
+        +fit_intercept
+        +tolerance
         +intercept_
-        +__init__(learning_rate, n_iterations, fit_intercept, tolerance)
-        +fit(X, y)
-        +predict(X)
-        +score(X, y)
+        +coef_: np.ndarray / None
+        +loss_history_: list[float]
+        +__init__(learning_rate: float, n_iterations: int, fit_intercept: bool, tolerance: float)
+        +fit(X: Any, y: Any)  "LinearRegressionGD"
+        +predict(X: Any)  np.ndarray
+        +score(X: Any, y: Any)  float
     }
     class LogisticRegressionGD {
         +learning_rate
-        +tolerance
-        +loss_history_
-        +threshold
-        +fit_intercept
-        +coef_
         +n_iterations
+        +fit_intercept
+        +tolerance
+        +threshold
         +intercept_
-        +__init__(learning_rate, n_iterations, fit_intercept, tolerance, threshold)
-        +_sigmoid(z)
-        +fit(X, y)
-        +predict_proba(X)
-        +predict(X)
-        +score(X, y)
+        +coef_: np.ndarray / None
+        +loss_history_: list[float]
+        +__init__(learning_rate: float, n_iterations: int, fit_intercept: bool, tolerance: float, threshold: float)
+        +_sigmoid(z: np.ndarray)  np.ndarray
+        +fit(X: Any, y: Any)  "LogisticRegressionGD"
+        +predict_proba(X: Any)  np.ndarray
+        +predict(X: Any)  np.ndarray
+        +score(X: Any, y: Any)  float
     }
     class GaussianNaiveBayes {
-        +_vars
         +var_smoothing
-        +_means
-        +classes_
-        +_log_priors
-        +n_features_
-        +__init__(var_smoothing)
-        +fit(X, y)
-        +predict(X)
-        +predict_proba(X)
-        +_compute_log_posteriors(X)
-        +_check_fitted()
+        +classes_: np.ndarray / None
+        +_log_priors: np.ndarray / None
+        +_means: np.ndarray / None
+        +_vars: np.ndarray / None
+        +n_features_: int / None
+        +__init__(var_smoothing: float)  None
+        +fit(X: Any, y: Any)  "GaussianNaiveBayes"
+        +predict(X: Any)  np.ndarray
+        +predict_proba(X: Any)  np.ndarray
+        +_compute_log_posteriors(X: np.ndarray)  np.ndarray
+        +_check_fitted()  None
     }
     class _BaseKNN {
-        +_y_train
-        +distance_metric
-        +_X_train
         +n_neighbors
-        +__init__(n_neighbors, distance_metric)
-        +fit(X, y)
-        +_compute_distances(X)
-        +_neighbor_targets(X)
+        +distance_metric
+        +_X_train: np.ndarray / None
+        +_y_train: np.ndarray / None
+        +__init__(n_neighbors: int, distance_metric: str)
+        +fit(X: Any, y: Any)
+        +_compute_distances(X: np.ndarray)  np.ndarray
+        +_neighbor_targets(X: Any)  np.ndarray
     }
     class KNNRegressor {
-        +predict(X)
-        +score(X, y)
+        +predict(X: Any)  np.ndarray
+        +score(X: Any, y: Any)  float
     }
     class KNNClassifier {
-        +predict(X)
-        +score(X, y)
+        +predict(X: Any)  np.ndarray
+        +score(X: Any, y: Any)  float
     }
     class RandomForest {
-        +random_state
-        +_trees
+        +task
+        +n_estimators
         +max_depth
         +min_samples_split
         +max_features
-        +task
-        +n_estimators
-        +n_features_
-        +__init__(task, n_estimators, max_depth, min_samples_split, max_features, random_state)
-        +fit(X, y)
-        +predict(X)
-        +_resolve_max_features(n_features)
-        +_majority_vote(all_preds)
-        +_check_fitted()
+        +random_state
+        +_trees: list[tuple[DecisionTree, np.ndarray]]
+        +n_features_: int / None
+        +__init__(task: str, n_estimators: int, max_depth: int / None, min_samples_split: int, max_features: int / float / str / None, random_state: int / None)  None
+        +fit(X: Any, y: Any)  "RandomForest"
+        +predict(X: Any)  np.ndarray
+        +_resolve_max_features(n_features: int)  int
+        +_majority_vote(all_preds: np.ndarray)  np.ndarray
+        +_check_fitted()  None
     }
     _BaseKNN <|-- KNNRegressor
     _BaseKNN <|-- KNNClassifier
