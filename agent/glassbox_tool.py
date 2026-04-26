@@ -29,7 +29,11 @@ def execute_glassbox(csv_filename: str, target_column: str) -> str:
     # Resolve an absolute host path for reliable Docker volume mounting on Windows.
     workspace_root = Path(__file__).resolve().parents[1]
     test_data_dir = workspace_root / "test_data"
+    results_dir = workspace_root / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+
     mount_source = str(test_data_dir).replace("\\", "/")
+    results_mount_source = str(results_dir).replace("\\", "/")
 
     docker_command = [
         "docker",
@@ -37,6 +41,8 @@ def execute_glassbox(csv_filename: str, target_column: str) -> str:
         "--rm",
         "-v",
         f"{mount_source}:/data",
+        "-v",
+        f"{results_mount_source}:/results",
         "-e",
         "PYTHONPATH=/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src",
         "glassbox-env:latest",
@@ -47,6 +53,8 @@ def execute_glassbox(csv_filename: str, target_column: str) -> str:
         f"/data/{csv_filename}",
         "--target",
         target_column,
+        "--output",
+        "/results/best_model.pkl",
     ]
 
     result = subprocess.run(docker_command, capture_output=True, text=True)

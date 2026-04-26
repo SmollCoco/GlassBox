@@ -16,8 +16,10 @@ The logic is housed in the GlassBox.autofit package. Below is a description of t
 - core.py (The Central Engine):
   - Contains the autofit() master function which orchestrates the entire workflow.
   - Manages data splitting into training and testing sets.
-  - Implements the feature preprocessing logic, including mean imputation and StandardScaler transformations.
+  - Implements the feature preprocessing logic and assembles a final `Pipeline` with `SimpleImputer`, `StandardScaler`, and the selected estimator.
   - Executes the model training loop, triggering RandomizedSearchCV for hyperparameter optimization.
+  - Returns a tuple `(report, fitted_pipeline)`.
+  - Supports model serialization via `output_path` and writes a pickle artifact (default: `/results/best_model.pkl`).
 
 - detect.py (Task Identification):
   - Houses the detect_task() function, which inspects the target column's data type and unique value counts.
@@ -31,6 +33,10 @@ The logic is housed in the GlassBox.autofit package. Below is a description of t
   - Defines the build_report() function to ensure the final AutoML output follows a deterministic, JSON-serializable structure.
   - Identifies the best_model based on cross-validation scores.
 
+- cli.py (Command-Line Entrypoint):
+  - Exposes `--data`, `--target`, and `--output` flags.
+  - Prints the JSON report while saving the fitted model pipeline to the output path.
+
 ## 3. Implementation Workflow and Commands
 
 ### Phase 1: Containerization and Pathing
@@ -43,7 +49,7 @@ To ensure stability across the complex monorepo structure, we implemented a cust
   ```
 
 - Logic:
-  We used absolute PYTHONPATH injection in the Dockerfile to stitch together all 10 internal packages (for example, glassbox-ml and glassbox-numpandas) without requiring fragile local installations.
+  We used absolute PYTHONPATH injection in the Dockerfile to stitch together all internal packages (for example, glassbox-ml and glassbox-numpandas) without requiring fragile local installations.
 
 ### Phase 2: NemoClaw Infrastructure (WSL)
 
@@ -60,7 +66,7 @@ NemoClaw requires a Linux-based environment for its secure OpenShell sandbox.
   ```
 
 - Choice:
-  Selected Google Gemini 2.5 Pro as the inference engine for its strong reasoning and tool-calling capabilities.
+  Selected Google Gemini 2.5 Flash as the inference engine for its strong reasoning and tool-calling capabilities.
 
 ### Phase 3: Agent Integration
 
@@ -78,7 +84,7 @@ We bridged the AI agent to the Dockerized engine.
   We avoided libraries like Scikit-Learn to ensure the pipeline remains a "White-Box" system where every mathematical operation is transparent and implemented from scratch.
 
 - Absolute Path Injection:
-  By manually setting PYTHONPATH during Docker runs, we bypassed pip auto-discovery issues common in nested src/ monorepos.
+  By setting PYTHONPATH in the Dockerfile, we bypassed pip auto-discovery issues common in nested src/ monorepos.
 
 - Isolated Sandbox:
   All executions occur in a "deny-by-default" sandbox, preventing the agent from making unauthorized network requests or accessing sensitive host files.
@@ -99,6 +105,9 @@ The engine produces a structured JSON report including:
 - Tuning:
   The best_params discovered for every tested algorithm.
 
+- Serialized Model:
+  A fitted pipeline artifact written to `/results/best_model.pkl` (or custom `--output` path).
+
 ## 6. Execution Guide
 
 ### Developer Manual Run
@@ -106,9 +115,19 @@ The engine produces a structured JSON report including:
 ```powershell
 docker run --rm `
   -v "${PWD}\test_data:/data" `
-  -e PYTHONPATH="/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src" `
+  -v "${PWD}\results:/results" `
   glassbox-env:latest `
-  python -m GlassBox.autofit.cli --data /data/your_file.csv --target your_column
+  python -m GlassBox.autofit.cli --data /data/your_file.csv --target your_column --output /results/best_model.pkl
+```
+
+From the `agent/` folder, mount parent folders:
+
+```powershell
+docker run --rm `
+  -v "${PWD}\..\test_data:/data" `
+  -v "${PWD}\..\results:/results" `
+  glassbox-env:latest `
+  python -m GlassBox.autofit.cli --data /data/your_file.csv --target your_column --output /results/best_model.pkl
 ```
 
 ### Agent Interaction
@@ -120,3 +139,5 @@ python run_agent.py
 ```
 
 "Analyze the 'test_model.csv' and predict the 'target' column."
+
+The agent tool mounts both `test_data` and `results`, and persists the serialized model to `results/best_model.pkl` on the host.

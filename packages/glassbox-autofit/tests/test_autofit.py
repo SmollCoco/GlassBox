@@ -6,11 +6,14 @@ import unittest
 import numpy as np
 
 from GlassBox.autofit import autofit
+from GlassBox.pipeline import Pipeline
 
 
 class TestAutoFit(unittest.TestCase):
     def _write_temp_csv(self, headers, rows):
-        handle = tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, newline="")
+        handle = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".csv", delete=False, newline=""
+        )
         with handle:
             writer = csv.writer(handle)
             writer.writerow(headers)
@@ -61,25 +64,31 @@ class TestAutoFit(unittest.TestCase):
     def test_autofit_classification_models_none_tuning_false(self):
         csv_path = self._classification_csv()
         try:
-            report = autofit(csv_path, target_col="target", models=None, tuning=False)
+            report, fitted_pipeline = autofit(
+                csv_path, target_col="target", models=None, tuning=False
+            )
             self._assert_report_shape(report)
             self.assertEqual(report["task"], "classification")
+            self.assertIsInstance(fitted_pipeline, Pipeline)
         finally:
             os.remove(csv_path)
 
     def test_autofit_regression_models_none_tuning_false(self):
         csv_path = self._regression_csv()
         try:
-            report = autofit(csv_path, target_col="target", models=None, tuning=False)
+            report, fitted_pipeline = autofit(
+                csv_path, target_col="target", models=None, tuning=False
+            )
             self._assert_report_shape(report)
             self.assertEqual(report["task"], "regression")
+            self.assertIsInstance(fitted_pipeline, Pipeline)
         finally:
             os.remove(csv_path)
 
     def test_autofit_specific_model_list(self):
         csv_path = self._classification_csv()
         try:
-            report = autofit(
+            report, fitted_pipeline = autofit(
                 csv_path,
                 target_col="target",
                 models=["KNNClassifier", "LogisticRegression"],
@@ -87,6 +96,7 @@ class TestAutoFit(unittest.TestCase):
             )
             names = [entry.get("name") for entry in report["models"]]
             self.assertListEqual(names, ["KNNClassifier", "LogisticRegression"])
+            self.assertIsInstance(fitted_pipeline, Pipeline)
         finally:
             os.remove(csv_path)
 
@@ -94,7 +104,9 @@ class TestAutoFit(unittest.TestCase):
         csv_path = self._classification_csv()
         try:
             with self.assertRaises(ValueError):
-                autofit(csv_path, target_col="target", models=["UnknownModel"], tuning=False)
+                autofit(
+                    csv_path, target_col="target", models=["UnknownModel"], tuning=False
+                )
         finally:
             os.remove(csv_path)
 

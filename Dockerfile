@@ -15,16 +15,7 @@ COPY . /app/
 RUN pip install --no-cache-dir -r requirements-dev.txt
 
 # 6. Absolute Path Injection (Bypasses setuptools completely)
-ENV PYTHONPATH="/app/packages/glassbox-autofit/src:\
-    /app/packages/glassbox-benchmark/src:\
-    /app/packages/glassbox-eda/src:\
-    /app/packages/glassbox-meta/src:\
-    /app/packages/glassbox-ml/src:\
-    /app/packages/glassbox-numpandas/src:\
-    /app/packages/glassbox-optimization/src:\
-    /app/packages/glassbox-pipeline/src:\
-    /app/packages/glassbox-preprocessing/src:\
-    /app/packages/glassbox-split/src"
+ENV PYTHONPATH=/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src
 
 # 7. Enforce the non-root user
 USER agentuser

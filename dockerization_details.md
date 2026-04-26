@@ -46,28 +46,31 @@ docker build -t glassbox-env:latest .
 
 ### 2. Execute an AutoFit Run
 
-Ensure you have a CSV file located in a local `test_data` folder. The command below dynamically mounts that folder into the container, links the `PYTHONPATH`, and triggers the pipeline.
+Ensure you have a CSV file located in a local `test_data` folder. The command below mounts data and results folders and triggers the pipeline.
 
 ```bash
 docker run --rm \
   -v "${PWD}\test_data:/data" \
-  -e PYTHONPATH="/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src" \
+  -v "${PWD}\results:/results" \
   glassbox-env:latest \
-  python -m GlassBox.autofit.cli --data /data/test_model.csv --target target
+  python -m GlassBox.autofit.cli --data /data/test_model.csv --target target --output /results/best_model.pkl
 ```
 
 ### 3. The Output
 
-The engine will output a JSON report directly to stdout. This JSON contains the task type, the eda statistics, the preprocessing configuration applied, and an array of models with their respective `best_params`, `metrics`, and `cv_score`.
+The engine outputs:
+
+- A JSON report to stdout with task type, EDA statistics, preprocessing summary, and model scores.
+- A serialized fitted pipeline artifact at `/results/best_model.pkl` (or your custom `--output` path).
 
 #### Output Example
 
 ```powershell
 (.venv) PS C:\Users\utilisateur\S6\AI\GlassBox\GlassBox> docker run --rm `
 >>   -v "${PWD}\test_data:/data" `
->>   -e PYTHONPATH="/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src" `
+>>   -v "${PWD}\results:/results" `
 >>   glassbox-env:latest `
->>   python -m GlassBox.autofit.cli --data /data/test_model.csv --target target
+>>   python -m GlassBox.autofit.cli --data /data/test_model.csv --target target --output /results/best_model.pkl
 {
   "task": "classification",
   "eda": {
