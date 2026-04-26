@@ -1,0 +1,20 @@
+version: "1.0"
+sandbox:
+  name: "glassbox-benchmark-env"
+  runtime: "openshell"
+  
+  permissions:
+    network:
+      outbound: deny  # Ensures benchmarks and models run completely offline
+      inbound: deny
+    
+    filesystem:
+      readonly_root: true
+      mounts:
+        - path: "/data"
+          access: "read_only"   # Agent reads target CSVs from here
+        - path: "/results"
+          access: "read_write"  # Agent saves benchmark CSVs and Markdown reports here
+          
+  process:
+    allow_privilege_escalation: false

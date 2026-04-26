@@ -9,7 +9,8 @@ It runs an end-to-end workflow:
 4. preprocess features
 5. train and optionally tune models
 6. evaluate models
-7. return a JSON-ready report dictionary
+7. assemble and fit a final preprocessing+model pipeline
+8. return the report and fitted pipeline, and optionally serialize the model
 
 ## Installation
 
@@ -22,7 +23,7 @@ pip install glassbox-autofit
 ```python
 from GlassBox.autofit import autofit
 
-report = autofit("data.csv", target_col="label")
+report, fitted_pipeline = autofit("data.csv", target_col="label")
 print(report["best_model"])
 ```
 
@@ -33,6 +34,25 @@ print(report["best_model"])
 - `models: list[str] | None = None` - Optional list of model names to train.
   - If `None`, all models for the detected task are used.
 - `tuning: bool = True` - If `True`, runs `RandomizedSearchCV` for each model.
+- `output_path: str | None = "/results/best_model.pkl"` - Optional destination for saving the fitted pipeline with `pickle`.
+
+## Return Value
+
+- `tuple[dict, Pipeline]`
+  - `report`: JSON-ready report dictionary
+  - `fitted_pipeline`: fitted `GlassBox.pipeline.Pipeline` containing `SimpleImputer`, `StandardScaler`, and the selected best estimator
+
+## CLI
+
+```bash
+python -m GlassBox.autofit.cli --data data.csv --target label --output /results/best_model.pkl
+```
+
+## Saved Model Artifact
+
+When `output_path` is provided (default: `/results/best_model.pkl`), AutoFit serializes the fitted pipeline with `pickle`.
+
+In Docker, mount a host folder to `/results` so the model file persists after container exit.
 
 ## JSON Output Structure
 
