@@ -1,21 +1,8 @@
 # GlassBox
 
-GlassBox is a lightweight, educational data science toolkit built from scratch with a transparent implementation style. It recreates core ideas from pandas and scikit-learn so users can inspect how dataframes, preprocessing, models, metrics, pipelines, search, and benchmarks work internally.
+GlassBox is a lightweight educational data science toolkit built from scratch. It recreates important parts of pandas and scikit-learn in a transparent way, so the code can be inspected and explained.
 
-The project is organized as several small packages under the shared `GlassBox` namespace.
 
-## Packages
-
-| Package | Purpose |
-|---|---|
-| `glassbox-numpandas` | DataFrame, Series, Index, and basic CSV/JSON/Excel I/O |
-| `glassbox-eda` | Statistical profiling, outlier detection, and plotting helpers |
-| `glassbox-preprocessing` | Imputers, scalers, encoders, column transformers, SMOTE |
-| `glassbox-split` | Train/test and train/validation/test splitting |
-| `glassbox-ml` | Linear/logistic regression, KNN, decision tree, random forest, naive Bayes, metrics |
-| `glassbox-pipeline` | Sequential preprocessing + estimator workflows |
-| `glassbox-optimization` | K-fold cross-validation, grid search, randomized search |
-| `glassbox-benchmark` | Comparisons against pandas and scikit-learn |
 
 ## Setup
 
@@ -25,62 +12,68 @@ From the repository root:
 python -m pip install -r requirements-dev.txt
 ```
 
-If you do not install the packages, run examples from the repository root. The test configuration already adds the package source folders through `pyproject.toml`.
 
-## Quick Example
+## Main Usage Example
+
+Run the included end-to-end example:
+
+```powershell
+python verify.py
+```
+
+This script demonstrates the main flow of the project:
+
+1. Add all local package source folders to Python path.
+2. Create a small synthetic dataset with `DataFrame` and `Series`.
+3. Split the data into training and testing sets.
+4. Build a machine learning pipeline.
+5. Apply preprocessing with `StandardScaler`.
+6. Balance the imbalanced dataset with `SMOTE`.
+7. Train `LogisticRegressionGD`.
+8. Tune the learning rate with `GridSearchCV`.
+9. Predict on the test data.
+10. Print the best parameters, best score, and prediction count.
+
+Expected output looks like:
+
+```text
+Testing pipeline end-to-end...
+Best params: {'clf__learning_rate': ...}
+Best score: ...
+Predictions len: ...
+Test finished successfully!
+```
+
+The exact score may change because `verify.py` generates random data.
+
+## What `verify.py` Uses
+
+The example imports and connects the main GlassBox modules:
 
 ```python
-import numpy as np
-
 from GlassBox.numpandas.core.dataframe import DataFrame
 from GlassBox.numpandas.core.series import Series
 from GlassBox.split import train_test_split
-from GlassBox.preprocessing import StandardScaler
+from GlassBox.preprocessing import SMOTE, StandardScaler
 from GlassBox.pipeline import Pipeline
-from GlassBox.ml import LogisticRegressionGD, accuracy_score
-
-X = DataFrame({
-    "age": np.array([20, 22, 24, 40, 42, 44]),
-    "income": np.array([100, 110, 115, 200, 210, 220]),
-})
-y = Series(np.array([0, 0, 0, 1, 1, 1]), name="target")
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.33, random_state=42
-)
-
-model = Pipeline([
-    ("scale", StandardScaler()),
-    ("clf", LogisticRegressionGD(learning_rate=0.1, n_iterations=1000)),
-])
-
-model.fit(X_train, y_train)
-predictions = model.predict(X_test)
-
-print("Accuracy:", accuracy_score(y_test, predictions))
-```
-
-## Hyperparameter Search Example
-
-```python
 from GlassBox.optimization import GridSearchCV
-
-param_grid = {
-    "clf__learning_rate": [0.01, 0.1, 1.0],
-}
-
-grid = GridSearchCV(
-    estimator=model,
-    param_grid=param_grid,
-    cv=2,
-    scoring="accuracy",
-)
-
-grid.fit(X_train, y_train)
-
-print("Best params:", grid.best_params_)
-print("Best score:", grid.best_score_)
+from GlassBox.ml.linear_model import LogisticRegressionGD
 ```
+
+
+
+## Project Structure
+
+| Package | Role |
+|---|---|
+| `glassbox-numpandas` | Provides `DataFrame` and `Series` |
+| `glassbox-preprocessing` | Provides scalers, imputers, encoders, and SMOTE |
+| `glassbox-split` | Splits data into train/test sets |
+| `glassbox-pipeline` | Chains preprocessing and models |
+| `glassbox-optimization` | Provides `GridSearchCV` and cross-validation |
+| `glassbox-ml` | Provides models and metrics |
+| `glassbox-eda` | Provides profiling and exploration helpers |
+| `glassbox-benchmark` | Compares GlassBox with pandas/scikit-learn |
 
 ## Benchmarking
 
@@ -112,7 +105,7 @@ The benchmark checks:
 - metrics such as `accuracy_score` and `mean_squared_error` against scikit-learn
 - model quality and runtime for linear regression, logistic regression, and KNN
 
-## Running Tests
+## Tests
 
 If `pytest` is installed:
 
@@ -120,7 +113,7 @@ If `pytest` is installed:
 python -m pytest
 ```
 
-For a simple end-to-end pipeline check without pytest:
+Without pytest, use the main verification script:
 
 ```powershell
 python verify.py
