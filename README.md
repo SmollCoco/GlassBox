@@ -2,7 +2,7 @@
 
 GlassBox is a lightweight educational data science toolkit built from scratch. It recreates important parts of pandas and scikit-learn in a transparent way, so the code can be inspected and explained.
 
-The easiest way to understand and use the project is to run `verify.py`.
+
 
 ## Setup
 
