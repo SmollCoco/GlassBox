@@ -1,0 +1,16 @@
+# Ignore local output and data directories
+benchmark_outputs/
+test_data/
+
+# Ignore virtual environments and git
+.venv/
+.git/
+.github/
+.vscode/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
