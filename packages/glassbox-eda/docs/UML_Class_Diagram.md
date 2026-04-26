@@ -79,4 +79,12 @@ classDiagram
     BasePlotter <|-- CountPlotter
     BasePlotter <|-- CorrelationMatrixPlotter
     BasePlotter <|-- PairPlotMatrixPlotter
+    
+    PlotManager *-- HistPlotter
+    PlotManager *-- BoxPlotter
+    PlotManager *-- ScatterPlotter
+    PlotManager *-- MissingnessPlotter
+    PlotManager *-- CountPlotter
+    PlotManager *-- CorrelationMatrixPlotter
+    PlotManager *-- PairPlotMatrixPlotter
 ```

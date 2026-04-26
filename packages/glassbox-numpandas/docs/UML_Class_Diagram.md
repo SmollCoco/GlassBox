@@ -101,4 +101,11 @@ classDiagram
         +__init__(series: Series)
         +__getitem__(key)
     }
+    
+    DataFrame *-- Index
+    Series *-- Index
+    _LocIndexer *-- DataFrame
+    _ILocIndexer *-- DataFrame
+    _SeriesLocIndexer *-- Series
+    _SeriesILocIndexer *-- Series
 ```
