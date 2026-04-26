@@ -189,33 +189,119 @@ class PairPlotMatrixPlotter(BasePlotter):
     """Class responsible for plotting pair plots."""
     
     def plot(self, df: DataFrame, title: str = None, **kwargs) -> None:
-        # Pairplot inherently creates its own figure/PairGrid in seaborn
-        # we have to reconstruct a pandas dataframe-like dictionary since seaborn expects pandas dataframe for pairplot
-        # Or we can do it via seaborn's pairgrid directly feeding it a dict
-        
         numerical_cols = [c for c in df.columns if np.issubdtype(df.dtypes[c], np.number)]
         if not numerical_cols:
             print("No numerical columns to pairplot.")
             return
-            
-        data_dict = {col: df[col].to_numpy() for col in numerical_cols}
-        
-        # Depending on kwargs, extract hue
-        hue = kwargs.get('hue')
+
+        # Extract pairplot-like options while keeping method signature unchanged.
+        hue = kwargs.pop('hue', None)
+        palette = kwargs.pop('palette', 'deep')
+        diag_kind = kwargs.pop('diag_kind', 'hist')
+        height = kwargs.pop('height', 2.5)
+        aspect = kwargs.pop('aspect', 1.0)
+        plot_kws = kwargs.pop('plot_kws', {})
+        diag_kws = kwargs.pop('diag_kws', {})
+        markers = kwargs.pop('markers', 'o')
+
+        n = len(numerical_cols)
+        fig, axes = plt.subplots(n, n, figsize=(aspect * height * n, height * n))
+        if n == 1:
+            axes = np.array([[axes]])
+
+        hue_arr = None
+        hue_levels = None
+        color_map = None
         if hue is not None and hue in df.columns:
-            data_dict[hue] = df[hue].to_numpy()
-            
-        # Convert dictionary to a recognizable format for seaborn. Seaborn can plot dict arrays.
-        import pandas as pd
-        pd_df = pd.DataFrame(data_dict)
-        # Note: falling back to pandas only for data transformation for seaborn compatibility 
-        # since seaborn's pairplot fundamentally requires pandas dataframe internally in versions < 0.13 usually
-        
-        warnings_catch = kwargs.pop('warnings_catch', True)
-        
-        g = sns.pairplot(pd_df, **kwargs)
+            hue_arr = df[hue].to_numpy()
+            hue_levels = np.unique(hue_arr)
+            palette_colors = sns.color_palette(palette, n_colors=len(hue_levels))
+            color_map = {level: palette_colors[idx] for idx, level in enumerate(hue_levels)}
+
+        for i, y_col in enumerate(numerical_cols):
+            y_arr = df[y_col].to_numpy().astype(float)
+            for j, x_col in enumerate(numerical_cols):
+                ax = axes[i, j]
+                x_arr = df[x_col].to_numpy().astype(float)
+
+                if i == j:
+                    if hue_arr is None:
+                        valid = ~np.isnan(x_arr)
+                        if diag_kind == 'kde':
+                            sns.kdeplot(x=x_arr[valid], ax=ax, **diag_kws)
+                        else:
+                            sns.histplot(x=x_arr[valid], ax=ax, **diag_kws)
+                    else:
+                        for level in hue_levels:
+                            valid = (~np.isnan(x_arr)) & (hue_arr == level)
+                            if np.any(valid):
+                                if diag_kind == 'kde':
+                                    sns.kdeplot(
+                                        x=x_arr[valid],
+                                        ax=ax,
+                                        color=color_map[level],
+                                        label=str(level),
+                                        **diag_kws,
+                                    )
+                                else:
+                                    sns.histplot(
+                                        x=x_arr[valid],
+                                        ax=ax,
+                                        color=color_map[level],
+                                        label=str(level),
+                                        **diag_kws,
+                                    )
+                else:
+                    if hue_arr is None:
+                        valid = (~np.isnan(x_arr)) & (~np.isnan(y_arr))
+                        sns.scatterplot(
+                            x=x_arr[valid],
+                            y=y_arr[valid],
+                            ax=ax,
+                            marker=markers,
+                            **plot_kws,
+                        )
+                    else:
+                        for level in hue_levels:
+                            valid = (~np.isnan(x_arr)) & (~np.isnan(y_arr)) & (hue_arr == level)
+                            if np.any(valid):
+                                sns.scatterplot(
+                                    x=x_arr[valid],
+                                    y=y_arr[valid],
+                                    ax=ax,
+                                    color=color_map[level],
+                                    label=str(level),
+                                    marker=markers,
+                                    **plot_kws,
+                                )
+
+                if i < n - 1:
+                    ax.set_xlabel("")
+                else:
+                    ax.set_xlabel(x_col)
+
+                if j > 0:
+                    ax.set_ylabel("")
+                else:
+                    ax.set_ylabel(y_col)
+
+                # Avoid repeated legends across all cells.
+                if hue_arr is not None and (i != 0 or j != n - 1):
+                    legend = ax.get_legend()
+                    if legend is not None:
+                        legend.remove()
+
+        # Keep one legend in the top-right subplot if hue is active.
+        if hue_arr is not None:
+            top_right_ax = axes[0, n - 1]
+            handles, labels = top_right_ax.get_legend_handles_labels()
+            if handles:
+                top_right_ax.legend(handles, labels, title=hue)
+
         if title:
-            g.fig.suptitle(title, y=1.02)
+            fig.suptitle(title, y=1.02)
+
+        plt.tight_layout()
         plt.show()
 
 
