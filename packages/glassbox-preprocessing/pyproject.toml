@@ -1,24 +1,12 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "glassbox-preprocessing"
 version = "0.1.0"
-description = "Preprocessing transformers for GlassBox"
-readme = "README.md"
-requires-python = ">=3.11"
-license = "MIT"
-authors = [{ name = "GlassBox" }]
-dependencies = [
-  "numpy>=1.23",
-  "glassbox-numpandas>=0.1.0",
-]
-
-[tool.setuptools]
-package-dir = {"" = "src"}
+description = "glassbox-preprocessing package for the GlassBox ecosystem"
+dependencies = ['glassbox-numpandas', 'numpy']
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["GlassBox.preprocessing*"]
-namespaces = true
