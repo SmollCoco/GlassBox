@@ -105,19 +105,6 @@ The benchmark checks:
 - metrics such as `accuracy_score` and `mean_squared_error` against scikit-learn
 - model quality and runtime for linear regression, logistic regression, and KNN
 
-## Tests
-
-If `pytest` is installed:
-
-```powershell
-python -m pytest
-```
-
-Without pytest, use the main verification script:
-
-```powershell
-python verify.py
-```
 
 ## Project Goal
 
