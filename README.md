@@ -12,7 +12,6 @@ From the repository root:
 python -m pip install -r requirements-dev.txt
 ```
 
-If you do not install the packages, run examples from the repository root. The test configuration already adds the package source folders through `pyproject.toml`.
 
 ## Main Usage Example
 
