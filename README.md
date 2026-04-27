@@ -208,6 +208,8 @@ The benchmark covers dataframe reductions, preprocessing, metrics, and selected 
 
 ## Installation
 
+PyPI: https://pypi.org/project/auto-glassbox/
+
 GlassBox targets Python 3.11+.
 
 For local development from the repository root, install the packages in editable mode:
