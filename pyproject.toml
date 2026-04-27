@@ -4,15 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "auto-glassbox"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="Youssef BENTALEB", email="bentalebyoussef7799@gmail.com" },
   { name="Manal Zaidi", email="manazaidi2005@gmail.com" },
   { name="Yassine Bourich", email="yassine.bourich@um6p.ma" },
   { name="Farah Bouhzam", email="farah.bouhzam@um6p.ma" },
 ]
-description = ""
+description = "Meta distribution for the GlassBox monorepo"
 requires-python = ">=3.11"
+dependencies = [
+  "glassbox-meta>=0.1.1",
+]
+
+[tool.setuptools]
+py-modules = []
 
 [tool.pytest.ini_options]
 testpaths = [
