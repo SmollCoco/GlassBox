@@ -22,6 +22,7 @@ pip install -e packages/glassbox-meta
 - glassbox-eda
 - glassbox-preprocessing
 - glassbox-ml
+- glassbox-eval
 - glassbox-optimization
 - glassbox-pipeline
 - glassbox-split

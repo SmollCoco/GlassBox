@@ -17,6 +17,7 @@ dependencies = [
   "glassbox-eda>=0.1.0",
   "glassbox-preprocessing>=0.1.0",
   "glassbox-ml>=0.1.0",
+  "glassbox-eval>=0.1.0",
   "glassbox-optimization>=0.1.0",
   "glassbox-pipeline>=0.1.0",
   "glassbox-split>=0.1.0",

@@ -23,6 +23,7 @@ testpaths = [
   "packages/glassbox-pipeline/tests",
   "packages/glassbox-optimization/tests",
   "packages/glassbox-ml/tests",
+  "packages/glassbox-eval/tests",
   "packages/glassbox-benchmark/tests",
 ]
 pythonpath = [
@@ -33,5 +34,6 @@ pythonpath = [
   "packages/glassbox-pipeline/src",
   "packages/glassbox-optimization/src",
   "packages/glassbox-ml/src",
+  "packages/glassbox-eval/src",
   "packages/glassbox-benchmark/src",
 ]
