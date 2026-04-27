@@ -45,9 +45,6 @@ flowchart LR
     G --> F
 ```
 
-<!-- SCREENSHOT: Run `python -m GlassBox.benchmark` and screenshot the terminal output showing the comparison table -->
-![Benchmark terminal output](docs/screenshots/benchmark_terminal.png)
-
 ```text
 GlassBox.numpandas       Core DataFrame, Series, Index, and I/O
 GlassBox.eda             Profiling, statistics, and plotting
@@ -297,9 +294,6 @@ plot_manager.boxplot(df, column="income")
 plot_manager.missingness(df, title="Missing Values")
 ```
 
-<!-- SCREENSHOT: Run PlotManager on a sample dataset and screenshot one of the generated plots (histogram or correlation heatmap) -->
-![EDA plot example](docs/screenshots/eda_plot.png)
-
 ## 6. Preprocess Features
 
 ```python
@@ -452,9 +446,6 @@ AutoFit returns:
 - `report`: JSON-ready dictionary containing task type, EDA summary, preprocessing summary, model metrics, cross-validation scores, and the selected best model.
 - `fitted_pipeline`: a fitted `GlassBox.pipeline.Pipeline` containing preprocessing steps and the best estimator.
 
-<!-- SCREENSHOT: Run autofit() on a small CSV in a Python REPL and screenshot the returned JSON report printed to terminal -->
-![AutoFit JSON report](docs/screenshots/autofit_output.png)
-
 ## 12. Run AutoFit From The CLI
 
 ```bash
@@ -510,9 +501,6 @@ Analyze the 'test_model.csv' and predict the 'target' column.
 ```
 
 The agent mounts `test_data` and `results`, runs the Dockerized AutoFit engine, and persists the fitted model to `results/best_model.pkl`.
-
-<!-- SCREENSHOT: Run the docker container with a CSV input and screenshot the terminal showing the agent tool response -->
-![NemoClaw agent run](docs/screenshots/nemoclaw_run.png)
 
 ## Testing
 
