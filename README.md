@@ -1,12 +1,52 @@
 # GlassBox
 
+![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
+![NumPy only](https://img.shields.io/badge/Dependencies-NumPy%20only-013243?logo=numpy&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![PyPI](https://img.shields.io/pypi/v/auto-glassbox)
+![GitHub stars](https://img.shields.io/github/stars/your-org/your-repo?style=social)
+
+<div align="center">
+<pre>
+     ____ _               ____
+    / ___| | __ _ ___ ___| __ )  _____  __
+ | |  _| |/ _` / __/ __|  _ \ / _ \ \/ /
+ | |_| | | (_| \__ \__ \ |_) | (_) >  <
+    \____|_|\__,_|___/___/____/ \___/_/\_\
+</pre>
+</div>
+
 GlassBox is a transparent, educational machine-learning ecosystem implemented as a Python multi-package monorepo. It provides pandas-like tabular data structures, exploratory data analysis, preprocessing, classical machine-learning models, dataset splitting, pipeline orchestration, hyperparameter search, benchmarking, and an AutoFit workflow.
 
 The project is intentionally "glass box": the main data and ML behavior is implemented in readable Python and NumPy-oriented code so users can inspect how the pieces work instead of treating them as black-box wrappers.
 
+## 30-Second Install + Run
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install auto-glassbox
+python -m GlassBox.benchmark --rows 1000 --cols 6 --repeats 2
+```
+
 ## Project Architecture
 
 GlassBox uses a shared Python namespace across independently installable packages:
+
+```mermaid
+flowchart LR
+    A[GlassBox.autofit] --> B[GlassBox.ml]
+    A --> C[GlassBox.optimization]
+    A --> D[GlassBox.preprocessing]
+    A --> E[GlassBox.eda]
+    A --> F[GlassBox.numpandas]
+
+    G[GlassBox.benchmark] --> B
+    G --> D
+    G --> F
+```
+
+<!-- SCREENSHOT: Run `python -m GlassBox.benchmark` and screenshot the terminal output showing the comparison table -->
+![Benchmark terminal output](docs/screenshots/benchmark_terminal.png)
 
 ```text
 GlassBox.numpandas       Core DataFrame, Series, Index, and I/O
@@ -29,7 +69,7 @@ The repository also includes:
 
 ## Modules And Classes
 
-### `GlassBox.numpandas`
+## `GlassBox.numpandas`
 
 `numpandas` is a minimal pandas-like tabular layer built on NumPy. It is designed for GlassBox ML workflows, not as a full pandas replacement.
 
@@ -48,7 +88,7 @@ Important behavior:
 - Supported operations include column selection, boolean masking, `loc`, `iloc`, `head`, `tail`, `sample`, `fillna`, `dropna`, `astype`, `apply`, `map`, `describe`, and NumPy conversion.
 - Intentionally unsupported: `groupby`, joins/merges, pivot/melt/stack, MultiIndex, and datetime/time-series APIs.
 
-### `GlassBox.eda`
+## `GlassBox.eda`
 
 The EDA package provides profiling, descriptive statistics, outlier detection, and plotting helpers for `numpandas` objects.
 
@@ -61,7 +101,7 @@ Main classes and objects:
 - `plot_manager`: shared `PlotManager` instance.
 - Plotter classes: `HistPlotter`, `BoxPlotter`, `ScatterPlotter`, `MissingnessPlotter`, `CountPlotter`, `CorrelationMatrixPlotter`, and `PairPlotMatrixPlotter`.
 
-### `GlassBox.preprocessing`
+## `GlassBox.preprocessing`
 
 The preprocessing package follows scikit-learn-style `fit`, `transform`, and `fit_transform` conventions while working with GlassBox tabular structures.
 
@@ -81,7 +121,7 @@ Main classes and functions:
 - `SMOTE`: synthetic minority oversampling for imbalanced datasets.
 - Exceptions: `PreprocessingError`, `NotFittedError`, and `DimensionalityError`.
 
-### `GlassBox.ml`
+## `GlassBox.ml`
 
 The ML package contains transparent implementations of traditional machine-learning algorithms and common metrics.
 
@@ -101,7 +141,7 @@ Metrics and utilities:
 - Regression: `mean_absolute_error`, `mean_squared_error`, `r2_score`.
 - Utility split helper: `train_test_split`.
 
-### `GlassBox.split`
+## `GlassBox.split`
 
 The split package provides standalone dataset splitting utilities that operate on GlassBox data structures.
 
@@ -110,7 +150,7 @@ Functions:
 - `train_test_split`: returns train/test partitions.
 - `train_validation_test_split`: returns train/validation/test partitions.
 
-### `GlassBox.pipeline`
+## `GlassBox.pipeline`
 
 The pipeline package chains preprocessing steps and a final estimator into a single workflow.
 
@@ -118,7 +158,7 @@ Main class:
 
 - `Pipeline`: sequentially runs named steps. Transformers are applied first, and the final estimator can be fitted, used for prediction, and scored.
 
-### `GlassBox.optimization`
+## `GlassBox.optimization`
 
 The optimization package provides cross-validation and hyperparameter search.
 
@@ -129,7 +169,7 @@ Main classes and functions:
 - `GridSearchCV`: exhaustive search over parameter grids.
 - `RandomizedSearchCV`: sampled search over parameter spaces.
 
-### `GlassBox.autofit`
+## `GlassBox.autofit`
 
 AutoFit is the top-level AutoML orchestrator. It loads a CSV dataset, profiles it, detects the task type, preprocesses features, trains/tunes candidate models, evaluates them, builds a final pipeline, and optionally serializes the fitted model.
 
@@ -146,7 +186,7 @@ Supporting modules:
 - `report.py`: JSON-ready report construction.
 - `cli.py`: command-line interface.
 
-### `GlassBox.benchmark`
+## `GlassBox.benchmark`
 
 The benchmark package compares selected GlassBox operations against pandas and scikit-learn baselines.
 
@@ -187,7 +227,7 @@ python -m pip install glassbox-meta
 
 ## How To Use GlassBox
 
-### 1. Create And Inspect Data
+## 1. Create And Inspect Data
 
 ```python
 import numpy as np
@@ -209,7 +249,7 @@ print(df.describe())
 print(df.head(2))
 ```
 
-### 2. Select Rows And Columns
+## 2. Select Rows And Columns
 
 ```python
 ages = df["age"]
@@ -222,7 +262,7 @@ mask = df["income"].to_numpy() > 3500
 high_income = df[mask]
 ```
 
-### 3. Handle Missing Values
+## 3. Handle Missing Values
 
 ```python
 filled = df.fillna({"age": 0})
@@ -230,7 +270,7 @@ clean_rows = df.dropna(axis=0, how="any")
 summary = df.describe()
 ```
 
-### 4. Read And Write Files
+## 4. Read And Write Files
 
 ```python
 from GlassBox.numpandas import read_csv, read_json, read_excel
@@ -244,7 +284,7 @@ csv_df.to_json("out.json")
 csv_df.to_excel("out.xlsx")
 ```
 
-### 5. Run EDA
+## 5. Run EDA
 
 ```python
 from GlassBox.eda import DataProfiler, plot_manager
@@ -257,7 +297,10 @@ plot_manager.boxplot(df, column="income")
 plot_manager.missingness(df, title="Missing Values")
 ```
 
-### 6. Preprocess Features
+<!-- SCREENSHOT: Run PlotManager on a sample dataset and screenshot one of the generated plots (histogram or correlation heatmap) -->
+![EDA plot example](docs/screenshots/eda_plot.png)
+
+## 6. Preprocess Features
 
 ```python
 from GlassBox.preprocessing import (
@@ -286,7 +329,7 @@ categorical_steps = ColumnTransformer(
 X_categorical = categorical_steps.fit_transform(df)
 ```
 
-### 7. Train A Model
+## 7. Train A Model
 
 ```python
 from GlassBox.ml import RandomForest, accuracy_score
@@ -305,7 +348,7 @@ predictions = model.predict(X)
 print(accuracy_score(y, predictions))
 ```
 
-### 8. Split A Dataset
+## 8. Split A Dataset
 
 ```python
 from GlassBox.split import train_test_split, train_validation_test_split
@@ -326,7 +369,7 @@ X_tr, X_val, X_te, y_tr, y_val, y_te = train_validation_test_split(
 )
 ```
 
-### 9. Build A Pipeline
+## 9. Build A Pipeline
 
 ```python
 from GlassBox.pipeline import Pipeline
@@ -344,7 +387,7 @@ predictions = pipe.predict(X_test)
 score = accuracy_score(y_test, predictions)
 ```
 
-### 10. Tune Hyperparameters
+## 10. Tune Hyperparameters
 
 ```python
 from GlassBox.ml import RandomForest
@@ -386,7 +429,7 @@ random_search = RandomizedSearchCV(
 random_search.fit(X_train, y_train)
 ```
 
-### 11. Run AutoFit From Python
+## 11. Run AutoFit From Python
 
 ```python
 from GlassBox.autofit import autofit
@@ -409,7 +452,10 @@ AutoFit returns:
 - `report`: JSON-ready dictionary containing task type, EDA summary, preprocessing summary, model metrics, cross-validation scores, and the selected best model.
 - `fitted_pipeline`: a fitted `GlassBox.pipeline.Pipeline` containing preprocessing steps and the best estimator.
 
-### 12. Run AutoFit From The CLI
+<!-- SCREENSHOT: Run autofit() on a small CSV in a Python REPL and screenshot the returned JSON report printed to terminal -->
+![AutoFit JSON report](docs/screenshots/autofit_output.png)
+
+## 12. Run AutoFit From The CLI
 
 ```bash
 python -m GlassBox.autofit.cli \
@@ -420,7 +466,7 @@ python -m GlassBox.autofit.cli \
 
 The CLI prints the JSON report to stdout and writes a pickle artifact when `--output` is provided.
 
-### 13. Run AutoFit In Docker
+## 13. Run AutoFit In Docker
 
 Build the image from the repository root:
 
@@ -448,7 +494,7 @@ docker run --rm `
   python -m GlassBox.autofit.cli --data /data/test_model.csv --target target --output /results/best_model.pkl
 ```
 
-### 14. Run The Agent Integration
+## 14. Run The Agent Integration
 
 The `agent/` folder exposes GlassBox AutoFit as an agent tool.
 
@@ -464,6 +510,9 @@ Analyze the 'test_model.csv' and predict the 'target' column.
 ```
 
 The agent mounts `test_data` and `results`, runs the Dockerized AutoFit engine, and persists the fitted model to `results/best_model.pkl`.
+
+<!-- SCREENSHOT: Run the docker container with a CSV input and screenshot the terminal showing the agent tool response -->
+![NemoClaw agent run](docs/screenshots/nemoclaw_run.png)
 
 ## Testing
 
@@ -582,4 +631,3 @@ Additional package-specific documentation is available in:
 - `dockerization_details.md`
 - `autofit_nemoclaw.md`
 - `packages/glassbox-benchmark/docs/glassbox_comparison_report.md`
-
