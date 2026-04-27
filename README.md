@@ -50,6 +50,7 @@ GlassBox.numpandas       Core DataFrame, Series, Index, and I/O
 GlassBox.eda             Profiling, statistics, and plotting
 GlassBox.preprocessing   Imputation, scaling, encoding, SMOTE, composition
 GlassBox.ml              Models, metrics, and ML utilities
+GlassBox.eval            Confusion matrix and classification reports
 GlassBox.split           Train/test and train/validation/test splitting
 GlassBox.pipeline        Sequential transformer/model pipelines
 GlassBox.optimization    Cross-validation and hyperparameter search
@@ -138,6 +139,16 @@ Metrics and utilities:
 - Regression: `mean_absolute_error`, `mean_squared_error`, `r2_score`.
 - Utility split helper: `train_test_split`.
 
+## `GlassBox.eval`
+
+The eval package provides classification-oriented evaluation helpers that complement model training in `GlassBox.ml`.
+
+Main functions:
+
+- `confusion_matrix`: builds confusion-matrix counts with optional label ordering and normalization.
+- `binary_confusion_counts`: returns `true_positives`, `false_negatives`, `false_positives`, and `true_negatives`.
+- `classification_report`: builds per-class precision/recall/F1/support plus accuracy, macro average, and weighted average.
+
 ## `GlassBox.split`
 
 The split package provides standalone dataset splitting utilities that operate on GlassBox data structures.
@@ -209,6 +220,7 @@ python -m pip install -e packages/glassbox-numpandas
 python -m pip install -e packages/glassbox-eda
 python -m pip install -e packages/glassbox-preprocessing
 python -m pip install -e packages/glassbox-ml
+python -m pip install -e packages/glassbox-eval
 python -m pip install -e packages/glassbox-split
 python -m pip install -e packages/glassbox-pipeline
 python -m pip install -e packages/glassbox-optimization
@@ -584,6 +596,7 @@ python -m build packages/glassbox-numpandas
 python -m build packages/glassbox-eda
 python -m build packages/glassbox-preprocessing
 python -m build packages/glassbox-ml
+python -m build packages/glassbox-eval
 python -m build packages/glassbox-split
 python -m build packages/glassbox-pipeline
 python -m build packages/glassbox-optimization
@@ -600,7 +613,7 @@ python -m build packages/glassbox-meta
 - **Benchmark results**: On the checked-in benchmark report (`5000x8`, 5 repeats), GlassBox reached `30.51x` speedup for `accuracy_score`, `7.85x` for `mean_squared_error`, and up to `5.14x` for dataframe reductions; on model quality it matched scikit-learn in key cases (`KNN accuracy 0.88 vs 0.88`, `logistic accuracy 0.9944 vs 0.9944` = `100%` of baseline), while the results CSV run also shows near-parity (`0.996 vs 1.0` = `99.6%` on logistic at `1000x8`).
 - **Agent integration**: GlassBox is packaged as a NemoClaw/OpenClaw-compatible tool (`glassbox_autofit`) that invokes the AutoML CLI in Docker and returns model/report output back to the agent.
 - **Dockerized runtime**: The full AutoML engine is containerized and runnable with one `docker run` command against mounted `/data` and `/results` volumes.
-- **Monorepo architecture**: The project ships **10 independently installable packages** under one shared `GlassBox.*` namespace (`numpandas`, `eda`, `preprocessing`, `ml`, `split`, `pipeline`, `optimization`, `benchmark`, `autofit`, `meta`).
+- **Monorepo architecture**: The project ships **11 independently installable packages** under one shared `GlassBox.*` namespace (`numpandas`, `eda`, `preprocessing`, `ml`, `eval`, `split`, `pipeline`, `optimization`, `benchmark`, `autofit`, `meta`).
 - **UML documentation**: Detailed UML class diagrams are maintained across the package modules in `docs/UML_Class_Diagram.md` files.
 
 ## Documentation Map
@@ -612,6 +625,7 @@ Additional package-specific documentation is available in:
 - `packages/glassbox-eda/docs/README.md`
 - `packages/glassbox-preprocessing/docs/README.md`
 - `packages/glassbox-ml/docs/README.md`
+- `packages/glassbox-eval/README.md`
 - `packages/glassbox-split/docs/README.md`
 - `packages/glassbox-pipeline/docs/README.md`
 - `packages/glassbox-optimization/docs/README.md`
