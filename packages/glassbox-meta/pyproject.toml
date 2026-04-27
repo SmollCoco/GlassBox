@@ -4,17 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "glassbox-meta"
-version = "0.1.0"
+version = "0.1.1"
 description = "Meta package for the GlassBox suite"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "GlassBox" }]
 dependencies = [
+  "glassbox-autofit>=0.1.0",
+  "glassbox-benchmark>=0.1.0",
   "glassbox-numpandas>=0.1.0",
   "glassbox-eda>=0.1.0",
   "glassbox-preprocessing>=0.1.0",
   "glassbox-ml>=0.1.0",
+  "glassbox-eval>=0.1.0",
   "glassbox-optimization>=0.1.0",
   "glassbox-pipeline>=0.1.0",
   "glassbox-split>=0.1.0",

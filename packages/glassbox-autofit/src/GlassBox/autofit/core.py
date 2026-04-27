@@ -21,7 +21,7 @@ from GlassBox.numpandas.core.series import Series
 from GlassBox.numpandas.utils.dtypes import is_nan_value
 from GlassBox.optimization import RandomizedSearchCV, cross_val_score
 from GlassBox.pipeline import Pipeline
-from GlassBox.preprocessing import OneHotEncoder, SimpleImputer, StandardScaler
+from GlassBox.preprocessing import LabelEncoder, OneHotEncoder, SimpleImputer, StandardScaler
 
 from GlassBox.autofit.detect import detect_task
 from GlassBox.autofit.registry import (
@@ -136,6 +136,43 @@ def _instantiate_model(model_name: str):
     return model_cls(**init_params)
 
 
+class _NumpyModelAdapter:
+    """Ensure underlying estimators always receive NumPy arrays."""
+
+    def __init__(self, estimator: Any):
+        object.__setattr__(self, "estimator", estimator)
+
+    def fit(self, X: Any, y: Any):
+        X_array = X.to_numpy() if hasattr(X, "to_numpy") else np.asarray(X)
+        y_array = y.to_numpy() if hasattr(y, "to_numpy") else np.asarray(y)
+        self.estimator.fit(X_array, y_array)
+        return self
+
+    def predict(self, X: Any):
+        X_array = X.to_numpy() if hasattr(X, "to_numpy") else np.asarray(X)
+        return self.estimator.predict(X_array)
+
+    def __getattr__(self, name: str) -> Any:
+        if name == "estimator":
+            raise AttributeError(name)
+        estimator = self.__dict__.get("estimator")
+        if estimator is None:
+            raise AttributeError(name)
+        return getattr(estimator, name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "estimator":
+            object.__setattr__(self, name, value)
+            return
+        setattr(self.estimator, name, value)
+
+    def __deepcopy__(self, memo: dict[int, Any]) -> "_NumpyModelAdapter":
+        import copy
+
+        estimator_copy = copy.deepcopy(self.estimator, memo)
+        return _NumpyModelAdapter(estimator_copy)
+
+
 def _prefix_search_space(param_space: dict[str, list[Any]]) -> dict[str, list[Any]]:
     return {f"estimator__{key}": values for key, values in param_space.items()}
 
@@ -152,11 +189,40 @@ def _strip_estimator_prefix(params: dict[str, Any]) -> dict[str, Any]:
 
 def _evaluate(task: str, y_true: Series, y_pred: np.ndarray) -> dict[str, float]:
     if task == "classification":
+        y_true_arr = y_true.to_numpy()
+        y_pred_arr = np.asarray(y_pred)
+        labels = np.unique(np.concatenate([y_true_arr.reshape(-1), y_pred_arr.reshape(-1)]))
+
+        if labels.size <= 2:
+            return {
+                "accuracy": float(accuracy_score(y_true_arr, y_pred_arr)),
+                "precision": float(precision_score(y_true_arr, y_pred_arr)),
+                "recall": float(recall_score(y_true_arr, y_pred_arr)),
+                "f1": float(f1_score(y_true_arr, y_pred_arr)),
+            }
+
+        precision_vals: list[float] = []
+        recall_vals: list[float] = []
+        f1_vals: list[float] = []
+
+        for label in labels:
+            true_positive = float(np.sum((y_true_arr == label) & (y_pred_arr == label)))
+            false_positive = float(np.sum((y_true_arr != label) & (y_pred_arr == label)))
+            false_negative = float(np.sum((y_true_arr == label) & (y_pred_arr != label)))
+
+            precision = true_positive / (true_positive + false_positive) if (true_positive + false_positive) > 0 else 0.0
+            recall = true_positive / (true_positive + false_negative) if (true_positive + false_negative) > 0 else 0.0
+            f1 = (2.0 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
+
+            precision_vals.append(precision)
+            recall_vals.append(recall)
+            f1_vals.append(f1)
+
         return {
-            "accuracy": float(accuracy_score(y_true, y_pred)),
-            "precision": float(precision_score(y_true, y_pred)),
-            "recall": float(recall_score(y_true, y_pred)),
-            "f1": float(f1_score(y_true, y_pred)),
+            "accuracy": float(accuracy_score(y_true_arr, y_pred_arr)),
+            "precision": float(np.mean(precision_vals)) if precision_vals else 0.0,
+            "recall": float(np.mean(recall_vals)) if recall_vals else 0.0,
+            "f1": float(np.mean(f1_vals)) if f1_vals else 0.0,
         }
 
     return {
@@ -168,6 +234,19 @@ def _evaluate(task: str, y_true: Series, y_pred: np.ndarray) -> dict[str, float]
 
 def _resolve_output_path(output_path: str) -> Path:
     return Path(output_path)
+
+
+def _encode_target(task: str, y: Series) -> tuple[Series, LabelEncoder | None]:
+    if task != "classification":
+        return y, None
+
+    encoder = LabelEncoder()
+    encoded = encoder.fit_transform(y)
+
+    if np.issubdtype(encoded.dtype, np.floating) and np.isnan(encoded).any():
+        raise ValueError("Target labels contain NaN values after encoding.")
+
+    return Series(encoded.astype(int), name=y.name), encoder
 
 
 def _train_test_split_frame(
@@ -228,12 +307,13 @@ def autofit(
 
     X_raw = df.drop(columns=[target_col])
     y = df[target_col]
+    y_encoded, _ = _encode_target(task, y)
 
     X_features, preprocessing_summary = _preprocess_features(X_raw)
 
     X_train, X_test, y_train, y_test = _train_test_split_frame(
         X_features,
-        y,
+        y_encoded,
         test_size=0.2,
         random_state=42,
     )
@@ -264,7 +344,7 @@ def autofit(
         }
 
         try:
-            estimator = _instantiate_model(model_name)
+            estimator = _NumpyModelAdapter(_instantiate_model(model_name))
             model_pipeline = Pipeline(
                 steps=[
                     ("imputer", SimpleImputer(strategy="mean")),
@@ -317,7 +397,7 @@ def autofit(
     if not best_model_name:
         raise RuntimeError("No model was successfully fitted during AutoFit.")
 
-    best_estimator = _instantiate_model(best_model_name)
+    best_estimator = _NumpyModelAdapter(_instantiate_model(best_model_name))
     for param_name, param_value in best_model_params.items():
         setattr(best_estimator, param_name, param_value)
 
@@ -328,7 +408,7 @@ def autofit(
             ("estimator", best_estimator),
         ]
     )
-    fitted_pipeline.fit(X_features, y)
+    fitted_pipeline.fit(X_features, y_encoded)
 
     if output_path:
         model_path = _resolve_output_path(output_path)

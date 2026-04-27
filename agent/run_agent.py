@@ -62,7 +62,7 @@ agent = build_agent(
     name="GlassBox Assistant",
     system_prompt="""You are an expert Data Scientist. You have access to the 'glassbox_autofit' tool. 
     When a user asks you to build a model, call the tool. Once the tool returns the JSON report, 
-    summarize the best model, its accuracy, and any outliers found during EDA in a friendly way. Do not output raw JSON to the user.""",
+    summarize the best model, its accuracy, any outliers found during EDA, and include confusion-matrix/classification-report insights when available in a friendly way. Do not output raw JSON to the user.""",
 )
 
 # 2. Register your Docker tool with the Agent

@@ -44,7 +44,7 @@ def execute_glassbox(csv_filename: str, target_column: str) -> str:
         "-v",
         f"{results_mount_source}:/results",
         "-e",
-        "PYTHONPATH=/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src",
+        "PYTHONPATH=/app/packages/glassbox-autofit/src:/app/packages/glassbox-benchmark/src:/app/packages/glassbox-eda/src:/app/packages/glassbox-eval/src:/app/packages/glassbox-meta/src:/app/packages/glassbox-ml/src:/app/packages/glassbox-numpandas/src:/app/packages/glassbox-optimization/src:/app/packages/glassbox-pipeline/src:/app/packages/glassbox-preprocessing/src:/app/packages/glassbox-split/src",
         "glassbox-env:latest",
         "python",
         "-m",
