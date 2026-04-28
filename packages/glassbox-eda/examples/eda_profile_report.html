@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head><title>EDA Profile Report</title><style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #e74c3c; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; font-weight: 600; color: #34495e; }
+        tr:hover { background-color: #f1f2f6; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .badge-numerical { background: #e1f5fe; color: #0277bd; }
+        .badge-categorical { background: #f3e5f5; color: #7b1fa2; }
+        .badge-boolean { background: #e8f5e9; color: #2e7d32; }
+        </style></head>
+<body>
+<div class='container'>
+<h1>Exploratory Data Analysis Report</h1>
+<h2>sepal_length <span class='badge badge-numerical'>NUMERICAL</span></h2>
+<table><tbody>
+<tr><th>Missing</th><td>0</td></tr>
+<tr><th>Missing Pct</th><td>0.0</td></tr>
+<tr><th>Mean</th><td>5.8433</td></tr>
+<tr><th>Median</th><td>5.8</td></tr>
+<tr><th>Std</th><td>0.8281</td></tr>
+<tr><th>Min</th><td>4.3</td></tr>
+<tr><th>Max</th><td>7.9</td></tr>
+<tr><th>Skewness</th><td>0.3118</td></tr>
+<tr><th>Kurtosis</th><td>5.4962</td></tr>
+<tr><th>Outliers Iqr</th><td>0</td></tr>
+</tbody></table>
+<h2>sepal_width <span class='badge badge-numerical'>NUMERICAL</span></h2>
+<table><tbody>
+<tr><th>Missing</th><td>0</td></tr>
+<tr><th>Missing Pct</th><td>0.0</td></tr>
+<tr><th>Mean</th><td>3.054</td></tr>
+<tr><th>Median</th><td>3.0</td></tr>
+<tr><th>Std</th><td>0.4336</td></tr>
+<tr><th>Min</th><td>2.0</td></tr>
+<tr><th>Max</th><td>4.4</td></tr>
+<tr><th>Skewness</th><td>0.3307</td></tr>
+<tr><th>Kurtosis</th><td>6.3279</td></tr>
+<tr><th>Outliers Iqr</th><td>4</td></tr>
+</tbody></table>
+<h2>petal_length <span class='badge badge-numerical'>NUMERICAL</span></h2>
+<table><tbody>
+<tr><th>Missing</th><td>0</td></tr>
+<tr><th>Missing Pct</th><td>0.0</td></tr>
+<tr><th>Mean</th><td>3.7587</td></tr>
+<tr><th>Median</th><td>4.35</td></tr>
+<tr><th>Std</th><td>1.7644</td></tr>
+<tr><th>Min</th><td>1.0</td></tr>
+<tr><th>Max</th><td>6.9</td></tr>
+<tr><th>Skewness</th><td>-0.2717</td></tr>
+<tr><th>Kurtosis</th><td>4.6577</td></tr>
+<tr><th>Outliers Iqr</th><td>0</td></tr>
+</tbody></table>
+<h2>petal_width <span class='badge badge-numerical'>NUMERICAL</span></h2>
+<table><tbody>
+<tr><th>Missing</th><td>0</td></tr>
+<tr><th>Missing Pct</th><td>0.0</td></tr>
+<tr><th>Mean</th><td>1.1987</td></tr>
+<tr><th>Median</th><td>1.3</td></tr>
+<tr><th>Std</th><td>0.7632</td></tr>
+<tr><th>Min</th><td>0.1</td></tr>
+<tr><th>Max</th><td>2.5</td></tr>
+<tr><th>Skewness</th><td>-0.1039</td></tr>
+<tr><th>Kurtosis</th><td>4.719</td></tr>
+<tr><th>Outliers Iqr</th><td>0</td></tr>
+</tbody></table>
+<h2>class <span class='badge badge-categorical'>CATEGORICAL</span></h2>
+<table><tbody>
+<tr><th>Missing</th><td>0</td></tr>
+<tr><th>Missing Pct</th><td>0.0</td></tr>
+<tr><th>Mode</th><td>Iris-setosa</td></tr>
+<tr><th>Distinct Values</th><td>3</td></tr>
+</tbody></table>
+</div></body></html>
