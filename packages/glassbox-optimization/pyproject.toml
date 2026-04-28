@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "glassbox-optimization"
-version = "0.1.0"
+version = "0.1.1"
 description = "Optimization and search utilities for GlassBox"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -12,7 +12,7 @@ license = "MIT"
 authors = [{ name = "GlassBox" }]
 dependencies = [
   "numpy>=1.23",
-  "glassbox-numpandas>=0.1.0",
+  "glassbox-numpandas>=0.1.1",
 ]
 
 [tool.setuptools]

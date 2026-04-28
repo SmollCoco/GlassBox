@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "auto-glassbox"
-version = "1.0.1"
+version = "0.1.1"
 authors = [
   { name="Youssef BENTALEB", email="bentalebyoussef7799@gmail.com" },
   { name="Manal Zaidi", email="manazaidi2005@gmail.com" },
@@ -22,6 +22,7 @@ py-modules = []
 
 [tool.pytest.ini_options]
 testpaths = [
+  "packages/glassbox-autofit/tests",
   "packages/glassbox-numpandas/tests",
   "packages/glassbox-eda/tests",
   "packages/glassbox-preprocessing/tests",
@@ -32,7 +33,13 @@ testpaths = [
   "packages/glassbox-eval/tests",
   "packages/glassbox-benchmark/tests",
 ]
+python_files = [
+  "test_*.py",
+  "*_test.py",
+  "stress_*.py",
+]
 pythonpath = [
+  "packages/glassbox-autofit/src",
   "packages/glassbox-numpandas/src",
   "packages/glassbox-eda/src",
   "packages/glassbox-preprocessing/src",

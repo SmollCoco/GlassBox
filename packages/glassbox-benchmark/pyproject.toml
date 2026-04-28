@@ -1,12 +1,21 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "glassbox-benchmark"
-version = "0.1.0"
+version = "0.1.1"
 description = "glassbox-benchmark package for the GlassBox ecosystem"
-dependencies = ['glassbox-numpandas', 'glassbox-ml']
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "GlassBox" }]
+dependencies = ["glassbox-numpandas>=0.1.1", "glassbox-ml>=0.1.1"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["GlassBox.benchmark*"]
+namespaces = true
